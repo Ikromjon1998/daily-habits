@@ -18,7 +18,7 @@ A clean, polished habits app where users can:
 | 1 | Base Layout & App Shell | [01-base-layout.md](01-base-layout.md) | Done |
 | 2 | Habit Model & Database | [02-habit-model.md](02-habit-model.md) | Done |
 | 3 | Home Screen - Today's Habits | [03-home-screen.md](03-home-screen.md) | Done |
-| 4 | Add & Edit Habits | [04-add-edit-habits.md](04-add-edit-habits.md) | Not Started |
+| 4 | Add & Edit Habits | [04-add-edit-habits.md](04-add-edit-habits.md) | Done |
 | 5 | Notification Reminders | [05-notifications.md](05-notifications.md) | Not Started |
 | 6 | Completion Tracking & Streaks | [06-streaks.md](06-streaks.md) | Not Started |
 | 7 | UI Polish & Final Touches | [07-polish.md](07-polish.md) | Not Started |

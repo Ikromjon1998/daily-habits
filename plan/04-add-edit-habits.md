@@ -1,6 +1,6 @@
 # Epic 4: Add & Edit Habits
 
-**Status:** Not Started
+**Status:** Done
 
 ## Description
 

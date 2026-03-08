@@ -47,20 +47,28 @@
                     $streak = $habit->currentStreak();
                 @endphp
 
-                <button wire:click="toggleHabit({{ $habit->id }})"
-                        wire:key="habit-{{ $habit->id }}"
-                        class="habit-card w-full text-left bg-gray-900 border rounded-2xl p-4 flex items-center gap-4 transition-all
-                               {{ $isCompleted ? 'border-emerald-500/30 bg-emerald-950/20' : 'border-gray-800/50' }}">
+                <div wire:key="habit-{{ $habit->id }}"
+                     class="habit-card bg-gray-900 border rounded-2xl p-4 flex items-center gap-4 transition-all
+                            {{ $isCompleted ? 'border-emerald-500/30 bg-emerald-950/20' : 'border-gray-800/50' }}">
 
-                    {{-- Completion Circle --}}
-                    <div class="flex-shrink-0 w-10 h-10 rounded-full border-2 flex items-center justify-center transition-all
-                                {{ $isCompleted ? 'border-emerald-500 bg-emerald-500/20' : 'border-gray-600' }}">
+                    {{-- Toggle area (tap to complete) --}}
+                    <button wire:click="toggleHabit({{ $habit->id }})"
+                            class="flex-shrink-0 w-10 h-10 rounded-full border-2 flex items-center justify-center transition-all
+                                   {{ $isCompleted ? 'border-emerald-500 bg-emerald-500/20' : 'border-gray-600 active:border-violet-400' }}">
                         @if($isCompleted)
                             <svg class="w-5 h-5 text-emerald-400 check-animate" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                             </svg>
                         @endif
-                    </div>
+
+                        {{-- Loading spinner --}}
+                        <div wire:loading wire:target="toggleHabit({{ $habit->id }})">
+                            <svg class="w-5 h-5 text-gray-500 animate-spin" fill="none" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" class="opacity-25" />
+                                <path fill="currentColor" class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                            </svg>
+                        </div>
+                    </button>
 
                     {{-- Emoji --}}
                     <span class="text-2xl flex-shrink-0">{{ $habit->emoji }}</span>
@@ -90,14 +98,14 @@
                         </div>
                     </div>
 
-                    {{-- Loading indicator --}}
-                    <div wire:loading wire:target="toggleHabit({{ $habit->id }})" class="flex-shrink-0">
-                        <svg class="w-5 h-5 text-gray-500 animate-spin" fill="none" viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" class="opacity-25" />
-                            <path fill="currentColor" class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    {{-- Edit button --}}
+                    <a href="/habits/{{ $habit->id }}/edit" wire:navigate
+                       class="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-gray-500 active:bg-gray-800 active:text-gray-300 transition-colors">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125" />
                         </svg>
-                    </div>
-                </button>
+                    </a>
+                </div>
             @endforeach
         </div>
 
