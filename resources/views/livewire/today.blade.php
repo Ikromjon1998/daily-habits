@@ -45,66 +45,119 @@
                 @php
                     $isCompleted = $habit->isCompletedToday();
                     $streak = $habit->currentStreak();
+                    $milestone = $habit->streakMilestone();
+                    $weeklyData = $habit->weeklyCompletions();
+                    $dayLabels = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
                 @endphp
 
-                <div wire:key="habit-{{ $habit->id }}"
-                     class="habit-card bg-gray-900 border rounded-2xl p-4 flex items-center gap-4 transition-all
-                            {{ $isCompleted ? 'border-emerald-500/30 bg-emerald-950/20' : 'border-gray-800/50' }}">
-
-                    {{-- Toggle area (tap to complete) --}}
-                    <button wire:click="toggleHabit({{ $habit->id }})"
-                            class="flex-shrink-0 w-10 h-10 rounded-full border-2 flex items-center justify-center transition-all
-                                   {{ $isCompleted ? 'border-emerald-500 bg-emerald-500/20' : 'border-gray-600 active:border-violet-400' }}">
-                        @if($isCompleted)
-                            <svg class="w-5 h-5 text-emerald-400 check-animate" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                            </svg>
-                        @endif
-
-                        {{-- Loading spinner --}}
-                        <div wire:loading wire:target="toggleHabit({{ $habit->id }})">
-                            <svg class="w-5 h-5 text-gray-500 animate-spin" fill="none" viewBox="0 0 24 24">
-                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" class="opacity-25" />
-                                <path fill="currentColor" class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                            </svg>
+                <div wire:key="habit-{{ $habit->id }}" class="space-y-0">
+                    {{-- Milestone Banner --}}
+                    @if($milestone)
+                        <div class="mx-2 mb-1 px-3 py-1.5 rounded-t-xl bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-b-0 border-amber-500/30 flex items-center gap-2">
+                            <span class="text-sm">{{ $milestone >= 100 ? '👑' : ($milestone >= 30 ? '⭐' : '🎉') }}</span>
+                            <span class="text-xs font-semibold text-amber-400">{{ $milestone }}-day streak!</span>
                         </div>
-                    </button>
+                    @endif
 
-                    {{-- Emoji --}}
-                    <span class="text-2xl flex-shrink-0">{{ $habit->emoji }}</span>
+                    <div class="bg-gray-900 border rounded-2xl p-4 transition-all
+                                {{ $isCompleted ? 'border-emerald-500/30 bg-emerald-950/20' : 'border-gray-800/50' }}
+                                {{ $milestone ? 'rounded-t-lg' : '' }}">
 
-                    {{-- Info --}}
-                    <div class="flex-1 min-w-0">
-                        <p class="font-semibold text-[15px] truncate {{ $isCompleted ? 'text-gray-400 line-through' : 'text-white' }}">
-                            {{ $habit->name }}
-                        </p>
-                        @if($habit->description)
-                            <p class="text-xs text-gray-500 truncate mt-0.5">{{ $habit->description }}</p>
-                        @endif
-                        <div class="flex items-center gap-3 mt-1.5">
-                            <span class="text-[11px] text-gray-500 flex items-center gap-1">
-                                <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        <div class="flex items-center gap-4">
+                            {{-- Toggle area --}}
+                            <button wire:click="toggleHabit({{ $habit->id }})"
+                                    class="habit-card flex-shrink-0 w-10 h-10 rounded-full border-2 flex items-center justify-center transition-all
+                                           {{ $isCompleted ? 'border-emerald-500 bg-emerald-500/20' : 'border-gray-600 active:border-violet-400' }}">
+                                @if($isCompleted)
+                                    <svg class="w-5 h-5 text-emerald-400 check-animate" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                                    </svg>
+                                @endif
+
+                                <div wire:loading wire:target="toggleHabit({{ $habit->id }})">
+                                    <svg class="w-5 h-5 text-gray-500 animate-spin" fill="none" viewBox="0 0 24 24">
+                                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" class="opacity-25" />
+                                        <path fill="currentColor" class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                                    </svg>
+                                </div>
+                            </button>
+
+                            {{-- Emoji --}}
+                            <span class="text-2xl flex-shrink-0">{{ $habit->emoji }}</span>
+
+                            {{-- Info --}}
+                            <div class="flex-1 min-w-0">
+                                <p class="font-semibold text-[15px] truncate {{ $isCompleted ? 'text-gray-400 line-through' : 'text-white' }}">
+                                    {{ $habit->name }}
+                                </p>
+                                @if($habit->description)
+                                    <p class="text-xs text-gray-500 truncate mt-0.5">{{ $habit->description }}</p>
+                                @endif
+                                <div class="flex items-center gap-3 mt-1.5">
+                                    <span class="text-[11px] text-gray-500 flex items-center gap-1">
+                                        <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                        </svg>
+                                        {{ \Carbon\Carbon::parse($habit->reminder_time)->format('g:i A') }}
+                                    </span>
+
+                                    @if($streak > 0)
+                                        <span class="text-[11px] font-semibold flex items-center gap-0.5
+                                            @if($streak >= 30) text-red-400
+                                            @elseif($streak >= 7) text-orange-400
+                                            @elseif($streak >= 3) text-amber-400
+                                            @else text-gray-400
+                                            @endif">
+                                            🔥 {{ $streak }}d
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
+                            {{-- Edit button --}}
+                            <a href="/habits/{{ $habit->id }}/edit" wire:navigate
+                               class="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-gray-500 active:bg-gray-800 active:text-gray-300 transition-colors">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125" />
                                 </svg>
-                                {{ \Carbon\Carbon::parse($habit->reminder_time)->format('g:i A') }}
-                            </span>
+                            </a>
+                        </div>
 
-                            @if($streak > 0)
-                                <span class="text-[11px] font-semibold flex items-center gap-0.5
-                                             {{ $streak >= 7 ? 'text-orange-400' : 'text-gray-400' }}">
-                                    🔥 {{ $streak }}d
-                                </span>
-                            @endif
+                        {{-- Weekly Calendar Dots --}}
+                        <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-800/30 px-1">
+                            @foreach($weeklyData as $date => $done)
+                                @php
+                                    $isToday = $date === now()->toDateString();
+                                    $isFuture = $date > now()->toDateString();
+                                @endphp
+                                <div class="flex flex-col items-center gap-1.5">
+                                    <span class="text-[9px] font-medium {{ $isToday ? 'text-violet-400' : 'text-gray-600' }}">
+                                        {{ $dayLabels[$loop->index] }}
+                                    </span>
+                                    <div class="w-5 h-5 rounded-full flex items-center justify-center
+                                        @if($done)
+                                            @if($streak >= 30) bg-red-500/30 ring-1 ring-red-500/50
+                                            @elseif($streak >= 7) bg-orange-500/30 ring-1 ring-orange-500/50
+                                            @elseif($streak >= 3) bg-amber-500/30 ring-1 ring-amber-500/50
+                                            @else bg-emerald-500/30 ring-1 ring-emerald-500/50
+                                            @endif
+                                        @elseif($isToday) ring-1 ring-violet-500/40
+                                        @elseif($isFuture) bg-gray-800/20
+                                        @else bg-gray-800/40
+                                        @endif">
+                                        @if($done)
+                                            <div class="w-2 h-2 rounded-full
+                                                @if($streak >= 30) bg-red-400
+                                                @elseif($streak >= 7) bg-orange-400
+                                                @elseif($streak >= 3) bg-amber-400
+                                                @else bg-emerald-400
+                                                @endif"></div>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
                     </div>
-
-                    {{-- Edit button --}}
-                    <a href="/habits/{{ $habit->id }}/edit" wire:navigate
-                       class="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-gray-500 active:bg-gray-800 active:text-gray-300 transition-colors">
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125" />
-                        </svg>
-                    </a>
                 </div>
             @endforeach
         </div>

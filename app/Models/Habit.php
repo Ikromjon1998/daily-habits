@@ -128,4 +128,43 @@ class Habit extends Model
     {
         return $this->completions()->count();
     }
+
+    /**
+     * Get completion status for the last 7 days (Mon–Sun of current week).
+     *
+     * @return array<string, bool>
+     */
+    public function weeklyCompletions(): array
+    {
+        $startOfWeek = Carbon::now()->startOfWeek(Carbon::MONDAY);
+
+        $completedDates = $this->completions()
+            ->whereDate('completed_at', '>=', $startOfWeek)
+            ->whereDate('completed_at', '<=', $startOfWeek->copy()->addDays(6))
+            ->pluck('completed_at')
+            ->map(fn ($date): string => Carbon::parse($date)->toDateString())
+            ->toArray();
+
+        $week = [];
+        for ($i = 0; $i < 7; $i++) {
+            $date = $startOfWeek->copy()->addDays($i)->toDateString();
+            $week[$date] = in_array($date, $completedDates);
+        }
+
+        return $week;
+    }
+
+    public function streakMilestone(): ?int
+    {
+        $streak = $this->currentStreak();
+        $milestones = [100, 30, 7];
+
+        foreach ($milestones as $milestone) {
+            if ($streak === $milestone) {
+                return $milestone;
+            }
+        }
+
+        return null;
+    }
 }
