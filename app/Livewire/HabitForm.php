@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Habit;
+use App\Services\HabitNotificationService;
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -66,10 +67,14 @@ class HabitForm extends Component
             'frequency' => $this->frequency,
         ];
 
+        $notificationService = app(HabitNotificationService::class);
+
         if ($this->habit) {
             $this->habit->update($data);
+            $notificationService->schedule($this->habit);
         } else {
-            Habit::create($data);
+            $habit = Habit::create($data);
+            $notificationService->schedule($habit);
         }
 
         $this->redirect('/', navigate: true);
@@ -78,6 +83,7 @@ class HabitForm extends Component
     public function delete(): void
     {
         if ($this->habit) {
+            app(HabitNotificationService::class)->cancel($this->habit);
             $this->habit->delete();
         }
 

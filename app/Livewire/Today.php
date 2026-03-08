@@ -3,9 +3,12 @@
 namespace App\Livewire;
 
 use App\Models\Habit;
+use App\Services\HabitNotificationService;
+use Ikromjon\LocalNotifications\Events\NotificationActionPressed;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Component;
+use Native\Mobile\Attributes\OnNative;
 
 class Today extends Component
 {
@@ -13,6 +16,34 @@ class Today extends Component
     {
         $habit = Habit::findOrFail($habitId);
         $habit->toggleToday();
+    }
+
+    /** @param  array{notificationId?: string, actionId?: string}  $data */
+    #[OnNative(NotificationActionPressed::class)]
+    public function onActionPressed(array $data = []): void
+    {
+        $notificationId = $data['notificationId'] ?? '';
+        $actionId = $data['actionId'] ?? '';
+
+        // Extract habit ID from notification ID (format: "habit-{id}")
+        if (! str_starts_with($notificationId, 'habit-')) {
+            return;
+        }
+
+        $habitId = (int) str_replace(['habit-', '-snooze'], '', $notificationId);
+        $habit = Habit::find($habitId);
+
+        if (! $habit) {
+            return;
+        }
+
+        if ($actionId === 'done') {
+            if (! $habit->isCompletedToday()) {
+                $habit->toggleToday();
+            }
+        } elseif ($actionId === 'snooze') {
+            app(HabitNotificationService::class)->snooze($habit);
+        }
     }
 
     public function render(): View
