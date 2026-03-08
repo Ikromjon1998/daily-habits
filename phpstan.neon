@@ -1,0 +1,10 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    paths:
+        - app/
+    level: 8
+    memoryLimit: 512M
+    excludePaths:
+        - app/Providers/NativeServiceProvider.php

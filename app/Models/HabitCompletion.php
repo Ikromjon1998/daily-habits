@@ -16,6 +16,7 @@ class HabitCompletion extends Model
         'completed_at' => 'date',
     ];
 
+    /** @return BelongsTo<Habit, $this> */
     public function habit(): BelongsTo
     {
         return $this->belongsTo(Habit::class);

@@ -21,6 +21,7 @@ class Habit extends Model
         'is_active' => 'boolean',
     ];
 
+    /** @return HasMany<HabitCompletion, $this> */
     public function completions(): HasMany
     {
         return $this->hasMany(HabitCompletion::class);
@@ -50,10 +51,12 @@ class Habit extends Model
 
         if ($existing) {
             $existing->delete();
+
             return false;
         }
 
         $this->completions()->create(['completed_at' => $today]);
+
         return true;
     }
 
@@ -76,20 +79,26 @@ class Habit extends Model
 
     public function longestStreak(): int
     {
-        $completions = $this->completions()
+        $dates = $this->completions()
             ->orderBy('completed_at')
             ->pluck('completed_at')
-            ->map(fn ($date) => Carbon::parse($date));
+            ->map(fn ($date): Carbon => Carbon::parse($date))
+            ->values();
 
-        if ($completions->isEmpty()) {
+        if ($dates->isEmpty()) {
             return 0;
         }
 
         $longest = 1;
         $current = 1;
 
-        for ($i = 1; $i < $completions->count(); $i++) {
-            if (abs((int) $completions[$i]->diffInDays($completions[$i - 1])) === 1) {
+        for ($i = 1; $i < $dates->count(); $i++) {
+            /** @var Carbon $currentDate */
+            $currentDate = $dates[$i];
+            /** @var Carbon $previousDate */
+            $previousDate = $dates[$i - 1];
+
+            if (abs((int) $currentDate->diffInDays($previousDate)) === 1) {
                 $current++;
                 $longest = max($longest, $current);
             } else {
