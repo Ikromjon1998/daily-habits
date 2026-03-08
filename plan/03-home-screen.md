@@ -1,6 +1,6 @@
 # Epic 3: Home Screen - Today's Habits
 
-**Status:** Not Started
+**Status:** Done
 
 ## Description
 

@@ -59,7 +59,7 @@
         ],
         "lint": "pint",
         "lint:check": "pint --test",
-        "analyse": "phpstan analyse",
+        "analyse": "phpstan analyse --memory-limit=512M",
         "rector": "rector process",
         "rector:check": "rector process --dry-run",
         "quality": [
