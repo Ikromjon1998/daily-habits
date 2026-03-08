@@ -20,7 +20,7 @@ A clean, polished habits app where users can:
 | 3 | Home Screen - Today's Habits | [03-home-screen.md](03-home-screen.md) | Done |
 | 4 | Add & Edit Habits | [04-add-edit-habits.md](04-add-edit-habits.md) | Done |
 | 5 | Notification Reminders | [05-notifications.md](05-notifications.md) | Done |
-| 6 | Completion Tracking & Streaks | [06-streaks.md](06-streaks.md) | Not Started |
+| 6 | Completion Tracking & Streaks | [06-streaks.md](06-streaks.md) | Done |
 | 7 | UI Polish & Final Touches | [07-polish.md](07-polish.md) | Not Started |
 
 ## Tech Stack

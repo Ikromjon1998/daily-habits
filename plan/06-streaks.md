@@ -1,6 +1,6 @@
 # Epic 6: Completion Tracking & Streaks
 
-**Status:** Not Started
+**Status:** Done
 
 ## Description
 
@@ -23,7 +23,7 @@ Add streak calculation logic, a weekly calendar view, and motivational feedback 
 
 ## Acceptance Criteria
 
-- [ ] Streaks calculate correctly across consecutive days
-- [ ] Weekly calendar shows completion dots
-- [ ] Streak milestones trigger visual feedback
-- [ ] Stats display on settings screen
+- [x] Streaks calculate correctly across consecutive days
+- [x] Weekly calendar shows completion dots (Mon-Sun color-coded)
+- [x] Streak milestones trigger visual feedback (7d/30d/100d banners)
+- [x] Stats display on settings screen (already done in Epic 5)
