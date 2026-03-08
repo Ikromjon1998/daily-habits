@@ -1,6 +1,6 @@
 # Epic 2: Habit Model & Database
 
-**Status:** Not Started
+**Status:** Done
 
 ## Description
 
