@@ -3,11 +3,12 @@
 namespace App\Services;
 
 use App\Models\Habit;
+use Ikromjon\LocalNotifications\Enums\RepeatInterval;
 use Ikromjon\LocalNotifications\Facades\LocalNotifications;
 
 class HabitNotificationService
 {
-    public function schedule(Habit $habit): void
+    public function schedule(Habit $habit, bool $testMode = false): void
     {
         $notificationId = $this->notificationId($habit);
 
@@ -17,13 +18,31 @@ class HabitNotificationService
         $body = $habit->description ?? 'Time to build your streak!';
         $streak = $habit->currentStreak();
 
+        if ($testMode) {
+            LocalNotifications::schedule([
+                'id' => $notificationId,
+                'title' => $habit->emoji.' '.$habit->name,
+                'body' => $body,
+                'subtitle' => $streak > 0 ? "Streak: {$streak} days" : 'Start your streak today!',
+                'delay' => 15,
+                'sound' => true,
+                'data' => ['habit_id' => $habit->id],
+                'actions' => [
+                    ['id' => 'done', 'title' => 'Done'],
+                    ['id' => 'snooze', 'title' => 'Snooze'],
+                ],
+            ]);
+
+            return;
+        }
+
         LocalNotifications::schedule([
             'id' => $notificationId,
             'title' => $habit->emoji.' '.$habit->name,
             'body' => $body,
             'subtitle' => $streak > 0 ? "Streak: {$streak} days" : 'Start your streak today!',
-            'delay' => $this->calculateDelay($habit),
-            'repeat' => 'daily',
+            'at' => $this->calculateTimestamp($habit),
+            'repeat' => RepeatInterval::Daily,
             'sound' => true,
             'data' => ['habit_id' => $habit->id],
             'actions' => [
@@ -61,20 +80,18 @@ class HabitNotificationService
         return 'habit-'.$habit->id;
     }
 
-    private function calculateDelay(Habit $habit): int
+    private function calculateTimestamp(Habit $habit): int
     {
         $parts = explode(':', $habit->reminder_time);
         $hour = (int) $parts[0];
         $minute = (int) ($parts[1] ?? 0);
 
-        $now = now();
-        $target = $now->copy()->setTime($hour, $minute, 0);
+        $target = now()->setTime($hour, $minute, 0);
 
-        // If the target time has passed today, schedule for tomorrow
-        if ($target->lte($now)) {
+        if ($target->lt(now())) {
             $target->addDay();
         }
 
-        return (int) $now->diffInSeconds($target);
+        return (int) $target->timestamp;
     }
 }
