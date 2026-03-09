@@ -5,7 +5,7 @@
 ## Stack & Versions
 
 - PHP 8.4 / Laravel 12 / Livewire 4 / Tailwind CSS 4
-- NativePHP Mobile v3 + `ikromjon/nativephp-mobile-local-notifications` v1.1.0
+- NativePHP Mobile v3 + `ikromjon/nativephp-mobile-local-notifications` v1.1.1
 - PHPStan (Larastan) level 8 / Pint / Rector
 - SQLite database, no authentication, no API
 

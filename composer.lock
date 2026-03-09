@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2d35c5d6b9346689be2f5afae80d3355",
+    "content-hash": "c0021b11bae16649813640fc8b820f11",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1278,16 +1278,16 @@
         },
         {
             "name": "ikromjon/nativephp-mobile-local-notifications",
-            "version": "v1.1.0",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Ikromjon1998/nativephp-mobile-local-notifications.git",
-                "reference": "ad739e842b124ac11c9f40450207d49307524bc0"
+                "reference": "0f09e2236b0f5ba85787778a8acd87121d442791"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Ikromjon1998/nativephp-mobile-local-notifications/zipball/ad739e842b124ac11c9f40450207d49307524bc0",
-                "reference": "ad739e842b124ac11c9f40450207d49307524bc0",
+                "url": "https://api.github.com/repos/Ikromjon1998/nativephp-mobile-local-notifications/zipball/0f09e2236b0f5ba85787778a8acd87121d442791",
+                "reference": "0f09e2236b0f5ba85787778a8acd87121d442791",
                 "shasum": ""
             },
             "require": {
@@ -1332,9 +1332,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Ikromjon1998/nativephp-mobile-local-notifications/issues",
-                "source": "https://github.com/Ikromjon1998/nativephp-mobile-local-notifications/tree/v1.1.0"
+                "source": "https://github.com/Ikromjon1998/nativephp-mobile-local-notifications/tree/v1.1.1"
             },
-            "time": "2026-03-08T21:34:38+00:00"
+            "time": "2026-03-09T22:08:06+00:00"
         },
         {
             "name": "laravel/framework",
@@ -9859,7 +9859,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^8.2"
+        "php": "^8.3"
     },
     "platform-dev": {},
     "plugin-api-version": "2.6.0"

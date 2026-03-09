@@ -33,62 +33,12 @@ class Settings extends Component
 
     public function sendTestNotification(): void
     {
-        // Test with exact delay
         LocalNotifications::schedule([
             'id' => 'test-notification',
             'title' => 'Test Notification',
             'body' => 'If you see this, notifications are working!',
-            'delay' => 10,
+            'delay' => 5,
             'sound' => true,
-        ]);
-    }
-
-    public function sendImmediateNotification(): void
-    {
-        // Test with immediate notification
-        LocalNotifications::schedule([
-            'id' => 'immediate-test',
-            'title' => 'Immediate Test',
-            'body' => 'This should appear NOW!',
-            'delay' => 2,
-            'sound' => true,
-        ]);
-    }
-
-    public function rescheduleAllHabitsTest(): void
-    {
-        $habits = Habit::query()->where('is_active', true)->get();
-
-        // First, test a simple notification
-        LocalNotifications::schedule([
-            'id' => 'simple-test-1',
-            'title' => 'Simple Test 1',
-            'body' => 'Testing without actions',
-            'delay' => 10,
-            'sound' => true,
-        ]);
-
-        // Now test with actions (like habits)
-        LocalNotifications::schedule([
-            'id' => 'actions-test-1',
-            'title' => 'Actions Test',
-            'body' => 'Testing with actions',
-            'delay' => 15,
-            'sound' => true,
-            'actions' => [
-                ['id' => 'done', 'title' => 'Done'],
-                ['id' => 'snooze', 'title' => 'Snooze'],
-            ],
-        ]);
-
-        // Now test with repeat
-        LocalNotifications::schedule([
-            'id' => 'repeat-test-1',
-            'title' => 'Repeat Test',
-            'body' => 'Testing with repeat',
-            'delay' => 20,
-            'sound' => true,
-            'repeat' => 'daily',
         ]);
     }
 
