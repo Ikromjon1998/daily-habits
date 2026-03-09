@@ -1,59 +1,135 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Daily Habits
+
+A mobile daily habits tracker built with Laravel, Livewire, and NativePHP Mobile. Runs natively on Android and iOS — no server required, everything works offline.
+
+This project is open source and serves as a real-world example of building a native mobile app with the Laravel/PHP ecosystem, including how to integrate NativePHP Mobile plugins like local notifications.
+
+## Screenshots
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="screenshots/today.jpeg" width="280" alt="Today Screen" />
+  &nbsp;&nbsp;
+  <img src="screenshots/settings.jpeg" width="280" alt="Settings Screen" />
 </p>
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Create daily habits with emoji icons and reminder times
+- Native push notifications with daily repeating reminders
+- Mark habits complete directly from notification action buttons
+- Track completion streaks and weekly progress
+- Dark theme optimized for mobile
+- Works completely offline — SQLite database, no API, no authentication
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Tech Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **PHP 8.4** / **Laravel 12** / **Livewire 4**
+- **NativePHP Mobile v3** — native Android & iOS builds from a single Laravel codebase
+- **Tailwind CSS 4** — dark theme with safe area inset support
+- **SQLite** — local on-device database
+- [`ikromjon/nativephp-mobile-local-notifications`](https://github.com/Ikromjon1998/nativephp-mobile-local-notifications) v1.1.1 — local notification scheduling with repeating intervals, action buttons, and rich content
 
-## Learning Laravel
+## NativePHP Plugin Example
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+This app demonstrates how to integrate a NativePHP Mobile plugin. The local notifications plugin is registered in the service provider and used throughout the app:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```php
+// app/Providers/NativeServiceProvider.php
+use Native\Mobile\Facades\System;
 
-## Laravel Sponsors
+public function boot(): void
+{
+    System::enablePlugins([
+        \Ikromjon\LocalNotifications\LocalNotificationsServiceProvider::class,
+    ]);
+}
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```php
+// Scheduling a daily repeating notification
+use Ikromjon\LocalNotifications\Facades\LocalNotifications;
+use Ikromjon\LocalNotifications\Enums\RepeatInterval;
 
-### Premium Partners
+LocalNotifications::schedule([
+    'id' => 'habit-1',
+    'title' => 'Time to Meditate',
+    'body' => 'Your 10-minute session is waiting',
+    'at' => now()->setTime(7, 0)->timestamp,
+    'repeat' => RepeatInterval::Daily,
+    'sound' => true,
+    'actions' => [
+        ['id' => 'done', 'title' => 'Done'],
+        ['id' => 'snooze', 'title' => 'Snooze'],
+    ],
+]);
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## Installation
+
+```bash
+git clone https://github.com/Ikromjon1998/daily-habits.git
+cd daily-habits
+composer install && npm install
+php artisan migrate --seed
+npm run build
+```
+
+## Running
+
+**On device (native build):**
+
+```bash
+php artisan native:run android
+# or
+php artisan native:run ios
+```
+
+> Notifications require a native build — they do not work with `php artisan native:jump`.
+
+**For local development:**
+
+```bash
+composer run dev
+```
+
+## Quality Gates
+
+```bash
+composer lint          # Format with Pint
+composer analyse       # PHPStan level 8
+composer rector:check  # Rector dry-run
+composer test          # Run test suite
+```
+
+## Project Structure
+
+```
+app/
+  Livewire/          Today.php, Settings.php, HabitForm.php
+  Models/            Habit.php, HabitCompletion.php
+  Services/          HabitNotificationService.php
+  Providers/         NativeServiceProvider.php
+resources/
+  css/app.css        Tailwind @theme + custom animations
+  views/
+    layouts/         Base layout with bottom nav and safe areas
+    livewire/        Component views
+plan/                Epic documents (development roadmap)
+```
+
+## Requirements
+
+- PHP 8.3+
+- Node.js 18+
+- NativePHP Mobile v3+
+- Android API 33+ / iOS 18.2+
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Contributions are welcome! Whether it's a bug fix, new feature, or improvement — feel free to open an issue or submit a pull request. Please read [CONTRIBUTING.md](CONTRIBUTING.md) before getting started.
 
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+If you'd like to use this project as a starting point for your own app, feel free to fork it.
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+MIT
