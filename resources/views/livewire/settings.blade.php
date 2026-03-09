@@ -57,16 +57,29 @@
             </button>
             
             @if($permissionStatus === 'granted')
-            <button wire:click="sendTestNotification" class="w-full px-5 py-3 flex items-center justify-between active:bg-gray-800/50 transition-colors border-t border-gray-800/30">
+            <button wire:click="sendImmediateNotification" class="w-full px-5 py-3 flex items-center justify-between active:bg-gray-800/50 transition-colors border-t border-gray-800/30">
                 <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-lg bg-blue-600/20 flex items-center justify-center">
-                        <svg class="w-4 h-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <div class="w-8 h-8 rounded-lg bg-green-600/20 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                         </svg>
                     </div>
                     <div class="text-left">
-                        <p class="text-sm font-medium">Send Test Notification</p>
-                        <p class="text-xs text-gray-500">Tap to test if notifications work</p>
+                        <p class="text-sm font-medium">Test Now (2 sec)</p>
+                        <p class="text-xs text-gray-500">Immediate test</p>
+                    </div>
+                </div>
+            </button>
+            <button wire:click="rescheduleAllHabitsTest" class="w-full px-5 py-3 flex items-center justify-between active:bg-gray-800/50 transition-colors border-t border-gray-800/30">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-orange-600/20 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-orange-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
+                    </div>
+                    <div class="text-left">
+                        <p class="text-sm font-medium">Test Habits (15 sec)</p>
+                        <p class="text-xs text-gray-500">Schedule all habits in 15 sec</p>
                     </div>
                 </div>
             </button>

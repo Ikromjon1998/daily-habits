@@ -9,10 +9,10 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
-<body class="bg-gray-950 text-white antialiased min-h-screen flex flex-col overflow-hidden">
+<body class="bg-gray-950 text-white antialiased h-screen flex flex-col">
 
     {{-- Main content area --}}
-    <main class="flex-1 overflow-y-auto" style="padding-top: var(--inset-top, 0px); padding-bottom: calc(var(--inset-bottom, 0px) + 4.5rem);">
+    <main class="flex-1 overflow-y-auto overscroll-y-none" style="padding-top: var(--inset-top, 0px); padding-bottom: calc(var(--inset-bottom, 0px) + 4.5rem);">
         {{ $slot }}
     </main>
 

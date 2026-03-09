@@ -7,7 +7,7 @@ use Ikromjon\LocalNotifications\Facades\LocalNotifications;
 
 class HabitNotificationService
 {
-    public function schedule(Habit $habit): void
+    public function schedule(Habit $habit, bool $testMode = false): void
     {
         $notificationId = $this->notificationId($habit);
 
@@ -17,13 +17,16 @@ class HabitNotificationService
         $body = $habit->description ?? 'Time to build your streak!';
         $streak = $habit->currentStreak();
 
+        $delay = $testMode ? 15 : $this->calculateDelay($habit);
+
+        // Note: 'repeat' is removed because it's buggy in the plugin
+        // Instead, we rely on the app to reschedule after each notification fires
         LocalNotifications::schedule([
             'id' => $notificationId,
             'title' => $habit->emoji.' '.$habit->name,
             'body' => $body,
             'subtitle' => $streak > 0 ? "Streak: {$streak} days" : 'Start your streak today!',
-            'delay' => $this->calculateDelay($habit),
-            'repeat' => 'daily',
+            'delay' => $delay,
             'sound' => true,
             'data' => ['habit_id' => $habit->id],
             'actions' => [
@@ -70,8 +73,9 @@ class HabitNotificationService
         $now = now();
         $target = $now->copy()->setTime($hour, $minute, 0);
 
-        // If the target time has passed today, schedule for tomorrow
-        if ($target->lte($now)) {
+        // If the target time has strictly passed (is in the past), schedule for tomorrow
+        // If target is now or in the future (same minute), schedule for today
+        if ($target->lt($now)) {
             $target->addDay();
         }
 
