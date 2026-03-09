@@ -212,13 +212,98 @@ public function onNotificationReceived(array $data = []): void
 5. App catches the event and reschedules for tomorrow at 7:00 AM
 6. Repeat infinitely - no native `repeat` needed!
 
+---
+
+## Important: This is a Workaround, Not a Solution
+
+The manual rescheduling above is a **workaround** that requires the app to be in the foreground or recently used. It's not ideal because:
+
+- **App must be running** to receive the `NotificationReceived` event
+- **If app is killed**, notifications won't reschedule
+- **User must open app periodically** for rescheduling to work
+- **Background restrictions** on modern Android can block event delivery
+
+### Ideal Solution (What Do)
+
+The plugin should the Plugin Should handle this automatically. Here are the recommended approaches:
+
+#### Option 1: Fix `setRepeating` (Recommended)
+
+Replace `AlarmManager.setRepeating()` with proper exact alarm handling:
+
+```kotlin
+// In LocalNotificationsFunctions.kt, change the scheduling logic:
+
+// Instead of:
+if (repeatMs > 0) {
+    alarmManager.setRepeating(...)
+}
+
+// Use:
+alarmManager.setExactAndAllowWhileIdle(
+    AlarmManager.RTC_WAKEUP,
+    triggerTimeMs,
+    pendingIntent
+)
+// Then, when notification fires, reschedule using the same logic
+// This gives you exact timing AND reliability
+```
+
+**Why this works**: `setExactAndAllowWhileIdle` is more reliable than `setRepeating` on modern Android.
+
+#### Option 2: Use Android WorkManager (Most Reliable)
+
+For truly reliable background scheduling, use WorkManager:
+
+```kotlin
+// Schedule with WorkManager instead of AlarmManager
+val workRequest = PeriodicWorkRequestBuilder<NotificationWorker>(
+    repeatInterval, TimeUnit.MILLISECONDS
+)
+    .setInputData(workData)
+    .build()
+
+WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+    notificationId,
+    ExistingPeriodicWorkPolicy.UPDATE,
+    workRequest
+)
+```
+
+**Benefits**:
+- Survives app kills
+- Respects battery optimization
+- Works reliably in background
+- Handles device reboots
+
+#### Option 3: Boot Receiver for Rescheduling
+
+The plugin already has a `BootReceiver` - extend it to also reschedule when app is opened:
+
+```kotlin
+// When app starts (in MainActivity or Application class):
+// 1. Query all scheduled notifications from SharedPreferences
+// 2. Check if any have passed their scheduled time
+// 3. Reschedule them for the next occurrence
+```
+
+### Why `setRepeating` Doesn't Work
+
+1. **Android 12+ (API 31) changes**: Exact alarms require special permissions
+2. **Inexact by design**: `setRepeating` is intentionally inexact to save battery
+3. **Battery optimization**: System can delay or skip repeating alarms
+4. **No fallback**: When it fails, there's no error or retry
+
+---
+
 ## Recommendations for Plugin Fix
 
 1. **Use `setExactAndAllowWhileIdle` for all alarms** (not just non-repeating)
-2. **Implement manual rescheduling** instead of relying on Android's `setRepeating`
+2. **Implement automatic rescheduling in the native code** (not in PHP)
 3. **Add proper error handling** when scheduling fails
 4. **Add debugging/logging** to help diagnose issues
 5. **Consider using WorkManager** for reliable background work
+6. **Add a reschedule method** that can be called from boot receiver
 
 ## Additional Notes
 
