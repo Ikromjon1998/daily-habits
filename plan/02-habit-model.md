@@ -26,7 +26,7 @@ Create the Habit model, migration, and HabitCompletion model to track daily habi
 
 ## Acceptance Criteria
 
-- [ ] Migrations run without errors
-- [ ] Models have correct relationships
-- [ ] Seeder creates realistic sample data
-- [ ] Habit model has helpers: `isCompletedToday()`, `currentStreak()`, `shouldShowToday()`
+- [x] Migrations run without errors
+- [x] Models have correct relationships
+- [x] Seeder creates realistic sample data
+- [x] Habit model has helpers: `isCompletedToday()`, `currentStreak()`, `shouldShowToday()`

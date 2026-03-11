@@ -1,8 +1,17 @@
-<div class="px-5 py-6">
+<div class="px-5 py-6" wire:poll.30s>
     {{-- Header --}}
     <div class="mb-6">
         <p class="text-sm text-gray-400 font-medium">{{ now()->format('l, M j') }}</p>
-        <p class="text-3xl font-bold mt-1">{{ now()->format('g:i A') }}</p>
+        <p class="text-3xl font-bold mt-1"
+           x-data="{ time: '' }"
+           x-init="
+               const tick = () => time = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+               tick();
+               setInterval(tick, 10000);
+           "
+           x-text="time">
+            {{ now()->format('g:i A') }}
+        </p>
     </div>
 
     @if($total > 0)

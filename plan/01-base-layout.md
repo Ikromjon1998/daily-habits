@@ -30,7 +30,7 @@ Create the mobile-first app shell with a bottom navigation bar, safe area insets
 
 ## Acceptance Criteria
 
-- [ ] App has a clean mobile layout with bottom navigation
-- [ ] Safe area insets work correctly
-- [ ] Two tabs navigate between screens
-- [ ] Layout looks professional and screenshot-ready
+- [x] App has a clean mobile layout with bottom navigation
+- [x] Safe area insets work correctly
+- [x] Two tabs navigate between screens
+- [x] Layout looks professional and screenshot-ready
