@@ -3,36 +3,58 @@
 [![CI](https://github.com/Ikromjon1998/daily-habits/actions/workflows/ci.yml/badge.svg)](https://github.com/Ikromjon1998/daily-habits/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/Ikromjon1998/daily-habits)](LICENSE)
 
-A mobile-first daily habits tracker built with Laravel, Livewire, and [NativePHP Mobile](https://nativephp.com). Track your habits, maintain streaks, and get native push notifications — all running locally on your device.
+A mobile daily habits tracker built with Laravel, Livewire, and NativePHP Mobile. Runs natively on Android and iOS — no server required, everything works offline.
+
+This project is open source and serves as a real-world example of building a native mobile app with the Laravel/PHP ecosystem, including how to integrate NativePHP Mobile plugins like local notifications.
+
+## Screenshots
+
+<p align="center">
+  <img src="screenshots/today.jpeg" width="280" alt="Today Screen" />
+  &nbsp;&nbsp;
+  <img src="screenshots/settings.jpeg" width="280" alt="Settings Screen" />
+</p>
 
 ## Features
 
 - Create daily habits with emoji icons and reminder times
-- Native local notifications that work offline (no server or Firebase needed)
+- Native push notifications with daily repeating reminders
 - Mark habits complete directly from notification action buttons
-- Streak tracking with visual progress indicators
-- Clean, dark-themed mobile UI with smooth animations
-- Survives device reboot on Android
+- Track completion streaks and weekly progress
+- Dark theme optimized for mobile
+- Works completely offline — SQLite database, no API, no authentication
 
 ## Tech Stack
 
-- **PHP 8.2+** / **Laravel 12** / **Livewire 4**
-- **NativePHP Mobile v3** — native iOS & Android builds
-- **[nativephp-mobile-local-notifications](https://github.com/Ikromjon1998/nativephp-mobile-local-notifications)** v1.1.1 — on-device notification scheduling
-- **Tailwind CSS 4** — utility-first styling
-- **SQLite** — local database, no server required
+- **PHP 8.4** / **Laravel 12** / **Livewire 4**
+- **NativePHP Mobile v3** — native Android & iOS builds from a single Laravel codebase
+- **Tailwind CSS 4** — dark theme with safe area inset support
+- **SQLite** — local on-device database
+- [`ikromjon/nativephp-mobile-local-notifications`](https://github.com/Ikromjon1998/nativephp-mobile-local-notifications) v1.2.0 — local notification scheduling with repeating intervals, action buttons, and rich content
 
-## Plugin Integration Example
+## NativePHP Plugin Example
 
-This app demonstrates how to integrate the `ikromjon/nativephp-mobile-local-notifications` plugin in a real NativePHP Mobile app:
+This app demonstrates how to integrate a NativePHP Mobile plugin. The local notifications plugin is registered in the service provider and used throughout the app:
 
 ```php
+// app/Providers/NativeServiceProvider.php
+use Native\Mobile\Facades\System;
+
+public function boot(): void
+{
+    System::enablePlugins([
+        \Ikromjon\LocalNotifications\LocalNotificationsServiceProvider::class,
+    ]);
+}
+```
+
+```php
+// Scheduling a daily repeating notification
 use Ikromjon\LocalNotifications\Facades\LocalNotifications;
 use Ikromjon\LocalNotifications\Enums\RepeatInterval;
 
-// Schedule a daily repeating notification
 LocalNotifications::schedule([
-    'id' => 'habit-meditation',
+    'id' => 'habit-1',
     'title' => 'Time to Meditate',
     'body' => 'Your 10-minute session is waiting',
     'at' => now()->setTime(7, 0)->timestamp,
@@ -45,31 +67,21 @@ LocalNotifications::schedule([
 ]);
 ```
 
-See `app/Services/HabitNotificationService.php` for the full implementation.
-
 ## Installation
-
-### Prerequisites
-
-- PHP 8.2+
-- Composer
-- Node.js 20+
-- Android Studio or Xcode (for native builds)
-
-### Setup
 
 ```bash
 git clone https://github.com/Ikromjon1998/daily-habits.git
 cd daily-habits
-composer install
-npm install
+composer install && npm install
 cp .env.example .env
 php artisan key:generate
 php artisan migrate --seed
 npm run build
 ```
 
-### Run on device
+## Running
+
+**On device (native build):**
 
 ```bash
 php artisan native:run android
@@ -77,9 +89,15 @@ php artisan native:run android
 php artisan native:run ios
 ```
 
-> Note: Notifications require a native build — they do not work with `php artisan native:run` in Jump mode.
+> Notifications require a native build — they do not work with `php artisan native:jump`.
 
-## Quality Tools
+**For local development:**
+
+```bash
+composer run dev
+```
+
+## Quality Gates
 
 ```bash
 composer lint          # Format with Pint
@@ -88,17 +106,34 @@ composer rector:check  # Rector dry-run
 composer test          # Run test suite
 ```
 
-## Contributing
+## Project Structure
 
-Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
-You're also free to fork this repository and use it as a starter for your own app.
+```
+app/
+  Livewire/          Today.php, Settings.php, HabitForm.php
+  Models/            Habit.php, HabitCompletion.php
+  Services/          HabitNotificationService.php
+  Providers/         NativeServiceProvider.php
+resources/
+  css/app.css        Tailwind @theme + custom animations
+  views/
+    layouts/         Base layout with bottom nav and safe areas
+    livewire/        Component views
+plan/                Epic documents (development roadmap)
+```
 
 ## Requirements
 
-- PHP 8.2+ (Laravel 12 + Symfony 7)
-- NativePHP Mobile v3
-- iOS 18.2+ / Android API 33+
+- PHP 8.3+
+- Node.js 18+
+- NativePHP Mobile v3+
+- Android API 33+ / iOS 18.2+
+
+## Contributing
+
+Contributions are welcome! Whether it's a bug fix, new feature, or improvement — feel free to open an issue or submit a pull request. Please read [CONTRIBUTING.md](CONTRIBUTING.md) before getting started.
+
+If you'd like to use this project as a starting point for your own app, feel free to fork it.
 
 ## License
 

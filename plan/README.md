@@ -30,3 +30,7 @@ A clean, polished habits app where users can:
 - `ikromjon/nativephp-mobile-local-notifications` v1.1.1
 - Tailwind CSS 4
 - SQLite
+
+## Support
+
+For questions or issues, contact: ikromjon98.98@icloud.com

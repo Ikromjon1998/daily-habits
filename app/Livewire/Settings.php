@@ -31,6 +31,17 @@ class Settings extends Component
         LocalNotifications::requestPermission();
     }
 
+    public function sendTestNotification(): void
+    {
+        LocalNotifications::schedule([
+            'id' => 'test-notification',
+            'title' => 'Test Notification',
+            'body' => 'If you see this, notifications are working!',
+            'delay' => 5,
+            'sound' => true,
+        ]);
+    }
+
     #[OnNative(PermissionGranted::class)]
     public function onPermissionGranted(): void
     {
@@ -58,6 +69,6 @@ class Settings extends Component
             'totalHabits' => $totalHabits,
             'completionsToday' => $completionsToday,
             'longestStreak' => $longestStreak,
-        ])->layout('layouts.app');
+        ]);
     }
 }

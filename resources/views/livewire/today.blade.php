@@ -2,7 +2,7 @@
     {{-- Header --}}
     <div class="mb-6">
         <p class="text-sm text-gray-400 font-medium">{{ now()->format('l, M j') }}</p>
-        <h1 class="text-2xl font-bold mt-1">Today's Habits</h1>
+        <p class="text-3xl font-bold mt-1">{{ now()->format('g:i A') }}</p>
     </div>
 
     @if($total > 0)

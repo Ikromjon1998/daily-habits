@@ -1,45 +1,64 @@
 # Contributing to Daily Habits
 
-Thanks for your interest in contributing! This project is open source and welcomes contributions of all kinds.
+Thanks for your interest in contributing! This guide will help you get started.
+
+## Ways to Contribute
+
+- **Bug reports** — Found something broken? Open an issue with steps to reproduce.
+- **Feature requests** — Have an idea? Open an issue to discuss it first.
+- **Pull requests** — Bug fixes, improvements, and new features are all welcome.
+- **Documentation** — Spot a typo or missing info? PRs for docs are appreciated.
+- **Forking** — Want to build your own app on top of this? Fork away — that's what open source is for.
 
 ## Getting Started
 
 1. Fork the repository
 2. Clone your fork:
    ```bash
-   git clone https://github.com/<your-username>/daily-habits.git
+   git clone https://github.com/YOUR_USERNAME/daily-habits.git
    cd daily-habits
    ```
 3. Install dependencies:
    ```bash
-   composer install
-   npm install
-   ```
-4. Set up the environment:
-   ```bash
+   composer install && npm install
    cp .env.example .env
    php artisan key:generate
    php artisan migrate --seed
    npm run build
    ```
+4. Create a branch for your changes:
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
 
 ## Development Workflow
 
-Start the dev servers:
+### Running Locally
+
 ```bash
-composer dev
+composer run dev
 ```
 
-### Quality Checks
+### Running on Device
 
-Before submitting a PR, make sure all checks pass:
+```bash
+php artisan native:run android
+# or
+php artisan native:run ios
+```
+
+### Quality Gates
+
+All of these must pass before submitting a PR:
 
 ```bash
 composer lint          # Format code with Pint
-composer analyse       # PHPStan level 8
-composer test          # Run tests
+composer analyse       # PHPStan level 8 static analysis
 composer rector:check  # Rector dry-run
+composer test          # Run test suite
 ```
+
+Run `composer lint` to auto-fix formatting. Run the rest to check for errors.
 
 ### Running Tests
 
@@ -51,25 +70,51 @@ php artisan test
 php artisan test --filter=HabitTest
 ```
 
-## Pull Requests
-
-1. Create a feature branch from `main`
-2. Make your changes
-3. Ensure all quality checks pass
-4. Write tests for new functionality
-5. Submit a PR with a clear description of your changes
-
 ## Code Style
 
-- PHP code is formatted with [Laravel Pint](https://laravel.com/docs/pint)
-- Static analysis with PHPStan at level 8
-- PHPUnit for tests (not Pest)
-- Livewire class-based components (not Volt)
+- **PHP 8.4** features — constructor promotion, match expressions, enums, etc.
+- **Explicit return types** on all methods
+- **Curly braces** for all control structures
+- **PHPDoc** `@return` with generics on Eloquent relationships
+- **Tailwind CSS 4** syntax — `@theme` in CSS, no tailwind.config.js
+- **Livewire** — class-based components only, not Volt
+- **PHPUnit** for tests (not Pest)
 
-## Forking
+When in doubt, follow the patterns in existing code. Check sibling files before creating new ones.
 
-You're free to fork this repository and build your own app on top of it. If you do, a mention or link back is appreciated but not required.
+## Submitting a Pull Request
 
-## Questions?
+1. Make sure all quality gates pass
+2. Write a clear PR title and description
+3. Reference any related issues (e.g., "Fixes #12")
+4. Keep PRs focused — one feature or fix per PR
+5. Add tests for new functionality when applicable
 
-Open an issue on GitHub if you have questions or run into problems.
+## Project Structure
+
+```
+app/
+  Livewire/          Today.php, Settings.php, HabitForm.php
+  Models/            Habit.php, HabitCompletion.php
+  Services/          HabitNotificationService.php
+  Providers/         NativeServiceProvider.php
+resources/
+  css/app.css        Tailwind @theme + custom animations
+  views/
+    layouts/         Base layout with bottom nav and safe areas
+    livewire/        Component views
+plan/                Epic documents (development roadmap)
+```
+
+## Reporting Issues
+
+When reporting a bug, include:
+
+- Device and OS version (e.g., Samsung Galaxy S23, Android 14)
+- Steps to reproduce
+- Expected vs actual behavior
+- Screenshots if applicable
+
+## License
+
+By contributing, you agree that your contributions will be licensed under the MIT License.

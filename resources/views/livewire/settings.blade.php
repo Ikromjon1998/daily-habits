@@ -55,6 +55,22 @@
                     </span>
                 @endif
             </button>
+            
+            @if($permissionStatus === 'granted')
+            <button wire:click="sendTestNotification" class="w-full px-5 py-3 flex items-center justify-between active:bg-gray-800/50 transition-colors border-t border-gray-800/30">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-green-600/20 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+                        </svg>
+                    </div>
+                    <div class="text-left">
+                        <p class="text-sm font-medium">Send Test Notification</p>
+                        <p class="text-xs text-gray-500">Fires in 5 seconds</p>
+                    </div>
+                </div>
+            </button>
+            @endif
         </div>
     </div>
 
