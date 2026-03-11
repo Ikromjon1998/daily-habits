@@ -39,5 +39,8 @@
     </nav>
 
     @livewireScripts
+    <script>
+        document.cookie = 'device_timezone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + ';path=/;max-age=31536000;SameSite=Lax';
+    </script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-<div class="px-5 py-6">
+<div class="px-5 py-6" wire:poll.30s>
     {{-- Header --}}
     <div class="mb-6">
         <h1 class="text-2xl font-bold">Settings</h1>

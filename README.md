@@ -17,10 +17,18 @@ This project is open source and serves as a real-world example of building a nat
 
 ## Features
 
-- Create daily habits with emoji icons and reminder times
+- Create daily habits with emoji icons, descriptions, and reminder times
+- Frequency options: daily, weekdays, or weekends
 - Native push notifications with daily repeating reminders
-- Mark habits complete directly from notification action buttons
-- Track completion streaks and weekly progress
+- Mark habits complete directly from notification action buttons (Done / Snooze)
+- Track completion streaks with color-coded visual feedback
+- Weekly calendar dots (Mon–Sun) on each habit card
+- Streak milestone banners (7-day, 30-day, 100-day)
+- Progress ring showing daily completion percentage
+- Auto-refreshing UI — habits, progress, and stats update every 30 seconds
+- Live clock on the Today screen (Alpine.js, no server round-trips)
+- Automatic device timezone detection with configurable fallback
+- Settings screen with notification permission management, test notification, and statistics
 - Dark theme optimized for mobile
 - Works completely offline — SQLite database, no API, no authentication
 
@@ -29,12 +37,19 @@ This project is open source and serves as a real-world example of building a nat
 - **PHP 8.4** / **Laravel 12** / **Livewire 4**
 - **NativePHP Mobile v3** — native Android & iOS builds from a single Laravel codebase
 - **Tailwind CSS 4** — dark theme with safe area inset support
+- **Alpine.js** — lightweight client-side interactivity (bundled with Livewire)
 - **SQLite** — local on-device database
 - [`ikromjon/nativephp-mobile-local-notifications`](https://github.com/Ikromjon1998/nativephp-mobile-local-notifications) v1.2.0 — local notification scheduling with repeating intervals, action buttons, and rich content
 
-## NativePHP Plugin Example
+## How It Works
 
-This app demonstrates how to integrate a NativePHP Mobile plugin. The local notifications plugin is registered in the service provider and used throughout the app:
+### Timezone Detection
+
+The app detects the device's timezone via JavaScript and stores it in a cookie. The `ApplyDeviceTimezone` middleware reads the cookie on each request and overrides the application timezone. If the cookie is missing or invalid, the configured default (`Europe/Berlin`) is used.
+
+### Notifications
+
+Notifications are scheduled using calendar-based `at` timestamps (Unix epoch) with `RepeatInterval::Daily`. This ensures the native platform (iOS calendar triggers / Android alarm manager) fires at the exact clock time — preventing drift that accumulates with delay-based scheduling.
 
 ```php
 // app/Providers/NativeServiceProvider.php
@@ -66,6 +81,11 @@ LocalNotifications::schedule([
     ],
 ]);
 ```
+
+### Live UI Updates
+
+- **Clock**: Alpine.js updates the displayed time every 10 seconds (client-side only).
+- **Habit data**: `wire:poll.30s` refreshes the Today and Settings screens every 30 seconds. Since NativePHP runs a local server, polling has zero network latency and negligible overhead. Livewire automatically throttles polling by 95% when the app is backgrounded.
 
 ## Installation
 
@@ -103,23 +123,32 @@ composer run dev
 composer lint          # Format with Pint
 composer analyse       # PHPStan level 8
 composer rector:check  # Rector dry-run
-composer test          # Run test suite
+composer test          # Run test suite (44 tests)
 ```
 
 ## Project Structure
 
 ```
 app/
+  Http/Middleware/    ApplyDeviceTimezone.php
   Livewire/          Today.php, Settings.php, HabitForm.php
   Models/            Habit.php, HabitCompletion.php
   Services/          HabitNotificationService.php
   Providers/         NativeServiceProvider.php
+bootstrap/
+  app.php            Middleware registration
+database/
+  factories/         HabitFactory.php
+  migrations/        habits, habit_completions
+  seeders/           HabitSeeder.php
 resources/
   css/app.css        Tailwind @theme + custom animations
   views/
-    layouts/         Base layout with bottom nav and safe areas
-    livewire/        Component views
+    layouts/         Base layout with bottom nav, safe areas, timezone detection
+    livewire/        Component views (today, settings, habit-form)
 plan/                Epic documents (development roadmap)
+tests/
+  Feature/           HabitFormTest, TodayTest, PageTest
 ```
 
 ## Requirements

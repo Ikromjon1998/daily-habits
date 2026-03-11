@@ -94,16 +94,25 @@ When in doubt, follow the patterns in existing code. Check sibling files before 
 
 ```
 app/
+  Http/Middleware/    ApplyDeviceTimezone.php
   Livewire/          Today.php, Settings.php, HabitForm.php
   Models/            Habit.php, HabitCompletion.php
   Services/          HabitNotificationService.php
   Providers/         NativeServiceProvider.php
+bootstrap/
+  app.php            Middleware registration
+database/
+  factories/         HabitFactory.php
+  migrations/        habits, habit_completions
+  seeders/           HabitSeeder.php
 resources/
   css/app.css        Tailwind @theme + custom animations
   views/
-    layouts/         Base layout with bottom nav and safe areas
-    livewire/        Component views
+    layouts/         Base layout with bottom nav, safe areas, timezone detection
+    livewire/        Component views (today, settings, habit-form)
 plan/                Epic documents (development roadmap)
+tests/
+  Feature/           HabitFormTest, TodayTest, PageTest
 ```
 
 ## Reporting Issues

@@ -21,14 +21,14 @@ A clean, polished habits app where users can:
 | 4 | Add & Edit Habits | [04-add-edit-habits.md](04-add-edit-habits.md) | Done |
 | 5 | Notification Reminders | [05-notifications.md](05-notifications.md) | Done |
 | 6 | Completion Tracking & Streaks | [06-streaks.md](06-streaks.md) | Done |
-| 7 | UI Polish & Final Touches | [07-polish.md](07-polish.md) | Not Started |
+| 7 | UI Polish & Final Touches | [07-polish.md](07-polish.md) | In Progress |
 
 ## Tech Stack
 
-- Laravel 12 + Livewire 4
+- PHP 8.4 / Laravel 12 / Livewire 4
 - NativePHP Mobile v3
-- `ikromjon/nativephp-mobile-local-notifications` v1.1.1
-- Tailwind CSS 4
+- `ikromjon/nativephp-mobile-local-notifications` v1.2.0
+- Tailwind CSS 4 / Alpine.js
 - SQLite
 
 ## Support

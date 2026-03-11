@@ -26,8 +26,8 @@ Build the main "Today" screen showing the user's habits for today with completio
 
 ## Acceptance Criteria
 
-- [ ] Today screen shows all active habits for the current day
-- [ ] Habits can be marked complete/incomplete by tapping
-- [ ] Progress indicator updates in real-time
-- [ ] Streak count displays correctly
-- [ ] Empty state is clean and inviting
+- [x] Today screen shows all active habits for the current day
+- [x] Habits can be marked complete/incomplete by tapping
+- [x] Progress indicator updates in real-time
+- [x] Streak count displays correctly
+- [x] Empty state is clean and inviting

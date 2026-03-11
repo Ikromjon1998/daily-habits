@@ -31,8 +31,8 @@ Integrate `ikromjon/nativephp-mobile-local-notifications` to schedule daily remi
 
 ## Acceptance Criteria
 
-- [ ] Permission request works on both platforms
-- [ ] Notifications schedule correctly when habits are created
-- [ ] "Done" action button marks habit complete
-- [ ] Notifications cancel when habits are deleted
-- [ ] Settings screen shows permission status
+- [x] Permission request works on both platforms
+- [x] Notifications schedule correctly when habits are created
+- [x] "Done" action button marks habit complete
+- [x] Notifications cancel when habits are deleted
+- [x] Settings screen shows permission status

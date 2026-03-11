@@ -28,8 +28,8 @@ Create screens to add new habits and edit existing ones, with emoji picker, time
 
 ## Acceptance Criteria
 
-- [ ] Users can create a new habit with all fields
-- [ ] Users can edit an existing habit
-- [ ] Users can delete a habit
-- [ ] Form validation works (name required, etc.)
-- [ ] After save, user returns to Today screen
+- [x] Users can create a new habit with all fields
+- [x] Users can edit an existing habit
+- [x] Users can delete a habit
+- [x] Form validation works (name required, etc.)
+- [x] After save, user returns to Today screen
