@@ -22,6 +22,7 @@ A clean, polished habits app where users can:
 | 5 | Notification Reminders | [05-notifications.md](05-notifications.md) | Done |
 | 6 | Completion Tracking & Streaks | [06-streaks.md](06-streaks.md) | Done |
 | 7 | UI Polish & Final Touches | [07-polish.md](07-polish.md) | Done |
+| 8 | Notification V2 — Plugin v1.2.0 Features | [08-notification-v2.md](08-notification-v2.md) | Done |
 
 ## Tech Stack
 
