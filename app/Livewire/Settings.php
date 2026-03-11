@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Habit;
 use App\Models\HabitCompletion;
+use App\Services\HabitNotificationService;
 use Ikromjon\LocalNotifications\Events\PermissionDenied;
 use Ikromjon\LocalNotifications\Events\PermissionGranted;
 use Ikromjon\LocalNotifications\Facades\LocalNotifications;
@@ -33,13 +34,19 @@ class Settings extends Component
 
     public function sendTestNotification(): void
     {
-        LocalNotifications::schedule([
-            'id' => 'test-notification',
-            'title' => 'Test Notification',
-            'body' => 'If you see this, notifications are working!',
-            'delay' => 5,
-            'sound' => true,
-        ]);
+        $habit = Habit::query()->where('is_active', true)->first();
+
+        if ($habit) {
+            app(HabitNotificationService::class)->schedule($habit, testMode: true);
+        } else {
+            LocalNotifications::schedule([
+                'id' => 'test-notification',
+                'title' => 'Test Notification',
+                'body' => 'If you see this, notifications are working!',
+                'delay' => 5,
+                'sound' => true,
+            ]);
+        }
     }
 
     #[OnNative(PermissionGranted::class)]

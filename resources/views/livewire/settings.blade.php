@@ -66,7 +66,7 @@
                     </div>
                     <div class="text-left">
                         <p class="text-sm font-medium">Send Test Notification</p>
-                        <p class="text-xs text-gray-500">Fires in 5 seconds</p>
+                        <p class="text-xs text-gray-500">Fires in 15 seconds with habit data</p>
                     </div>
                 </div>
             </button>

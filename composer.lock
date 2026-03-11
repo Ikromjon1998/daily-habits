@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f9cdecc1a075507d53092c100ccb47a0",
+    "content-hash": "1e381eae6621e9c1bcd147abee62595d",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1278,16 +1278,16 @@
         },
         {
             "name": "ikromjon/nativephp-mobile-local-notifications",
-            "version": "v1.1.1",
+            "version": "v1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Ikromjon1998/nativephp-mobile-local-notifications.git",
-                "reference": "0f09e2236b0f5ba85787778a8acd87121d442791"
+                "reference": "909653fd888e435e998c657b9e25b1a1af2eafc3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Ikromjon1998/nativephp-mobile-local-notifications/zipball/0f09e2236b0f5ba85787778a8acd87121d442791",
-                "reference": "0f09e2236b0f5ba85787778a8acd87121d442791",
+                "url": "https://api.github.com/repos/Ikromjon1998/nativephp-mobile-local-notifications/zipball/909653fd888e435e998c657b9e25b1a1af2eafc3",
+                "reference": "909653fd888e435e998c657b9e25b1a1af2eafc3",
                 "shasum": ""
             },
             "require": {
@@ -1296,9 +1296,11 @@
             },
             "require-dev": {
                 "larastan/larastan": "^3.0",
+                "laravel/pint": "^1.28",
                 "orchestra/testbench": "^9.0",
                 "pestphp/pest": "^3.0",
-                "phpstan/phpstan": "^2.0"
+                "phpstan/phpstan": "^2.0",
+                "rector/rector": "^2.3"
             },
             "type": "nativephp-plugin",
             "extra": {
@@ -1332,9 +1334,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Ikromjon1998/nativephp-mobile-local-notifications/issues",
-                "source": "https://github.com/Ikromjon1998/nativephp-mobile-local-notifications/tree/v1.1.1"
+                "source": "https://github.com/Ikromjon1998/nativephp-mobile-local-notifications/tree/v1.2.0"
             },
-            "time": "2026-03-09T22:08:06+00:00"
+            "time": "2026-03-11T03:05:09+00:00"
         },
         {
             "name": "laravel/framework",

@@ -15,6 +15,12 @@ All notable changes to Daily Habits are documented in this file.
 - **Completion glow effect** — The toggle circle pulses with an emerald glow when a habit is marked complete.
 - **Celebration shimmer** — The progress card shows a shimmer animation when all habits are completed (100%).
 - **FAB entrance animation** — The floating action button bounces in with a spring animation.
+- **Frequency-aware notifications** — Weekday habits now only fire Mon–Fri (`repeatDays: [1,2,3,4,5]`), weekend habits only Sat–Sun (`repeatDays: [6,7]`). Previously all habits fired daily regardless of frequency setting.
+- **iOS badge count** — App icon badge shows the number of incomplete habits for today.
+- **Expanded notification content** — `bigText` shows habit description and streak motivation when the notification is expanded.
+- **Type-safe notification DTOs** — All notification scheduling uses `NotificationOptions` and `NotificationAction` DTOs instead of raw arrays.
+- **13 new notification tests** — Full test coverage for frequency scheduling, DTOs, badge, bigText, snooze, and cancel (57 tests total).
+- **`Habit::incompleteCountToday()`** — Static helper for counting remaining habits.
 
 ### Changed
 
@@ -25,6 +31,7 @@ All notable changes to Daily Habits are documented in this file.
 - Active frequency button in habit form shows a violet shadow for depth.
 - Stats in Settings use color coding (emerald for completions, orange for streaks).
 - Updated version numbers in Settings to v1.2.0.
+- Upgraded `ikromjon/nativephp-mobile-local-notifications` constraint from `^1.1` to `^1.2`.
 
 ## [1.1.1] - 2026-03-09
 

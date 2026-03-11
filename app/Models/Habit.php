@@ -128,6 +128,15 @@ class Habit extends Model
         };
     }
 
+    public static function incompleteCountToday(): int
+    {
+        return self::query()
+            ->where('is_active', true)
+            ->get()
+            ->filter(fn (self $habit): bool => $habit->shouldShowToday() && ! $habit->isCompletedToday())
+            ->count();
+    }
+
     public function totalCompletions(): int
     {
         return $this->completions()->count();
