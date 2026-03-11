@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 class Habit extends Model
 {
+    /** @use HasFactory<\Database\Factories\HabitFactory> */
+    use HasFactory;
+
     protected $fillable = [
         'name',
         'description',

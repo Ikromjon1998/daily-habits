@@ -37,6 +37,10 @@ html {
     scroll-behavior: smooth;
 }
 
+main {
+    -webkit-overflow-scrolling: touch;
+}
+
 /* Habit card tap animation */
 .habit-card {
     transition: transform 0.1s ease, opacity 0.1s ease;

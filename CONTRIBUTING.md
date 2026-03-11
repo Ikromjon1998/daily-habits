@@ -21,6 +21,8 @@ Thanks for your interest in contributing! This guide will help you get started.
 3. Install dependencies:
    ```bash
    composer install && npm install
+   cp .env.example .env
+   php artisan key:generate
    php artisan migrate --seed
    npm run build
    ```
@@ -58,6 +60,16 @@ composer test          # Run test suite
 
 Run `composer lint` to auto-fix formatting. Run the rest to check for errors.
 
+### Running Tests
+
+```bash
+# All tests
+php artisan test
+
+# Specific test
+php artisan test --filter=HabitTest
+```
+
 ## Code Style
 
 - **PHP 8.4** features — constructor promotion, match expressions, enums, etc.
@@ -82,22 +94,17 @@ When in doubt, follow the patterns in existing code. Check sibling files before 
 
 ```
 app/
-  Livewire/          Page components (Today, Settings, HabitForm)
-  Models/            Habit, HabitCompletion
-  Services/          HabitNotificationService
-  Providers/         NativeServiceProvider (plugin registration)
+  Livewire/          Today.php, Settings.php, HabitForm.php
+  Models/            Habit.php, HabitCompletion.php
+  Services/          HabitNotificationService.php
+  Providers/         NativeServiceProvider.php
 resources/
-  css/app.css        Tailwind theme + animations
-  views/livewire/    Component views
+  css/app.css        Tailwind @theme + custom animations
+  views/
+    layouts/         Base layout with bottom nav and safe areas
+    livewire/        Component views
 plan/                Epic documents (development roadmap)
 ```
-
-## Tech Stack
-
-- PHP 8.4 / Laravel 12 / Livewire 4 / Tailwind CSS 4
-- NativePHP Mobile v3
-- `ikromjon/nativephp-mobile-local-notifications` v1.1.1
-- SQLite (local, no server)
 
 ## Reporting Issues
 

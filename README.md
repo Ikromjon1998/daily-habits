@@ -1,5 +1,8 @@
 # Daily Habits
 
+[![CI](https://github.com/Ikromjon1998/daily-habits/actions/workflows/ci.yml/badge.svg)](https://github.com/Ikromjon1998/daily-habits/actions/workflows/ci.yml)
+[![License](https://img.shields.io/github/license/Ikromjon1998/daily-habits)](LICENSE)
+
 A mobile daily habits tracker built with Laravel, Livewire, and NativePHP Mobile. Runs natively on Android and iOS — no server required, everything works offline.
 
 This project is open source and serves as a real-world example of building a native mobile app with the Laravel/PHP ecosystem, including how to integrate NativePHP Mobile plugins like local notifications.
@@ -27,7 +30,7 @@ This project is open source and serves as a real-world example of building a nat
 - **NativePHP Mobile v3** — native Android & iOS builds from a single Laravel codebase
 - **Tailwind CSS 4** — dark theme with safe area inset support
 - **SQLite** — local on-device database
-- [`ikromjon/nativephp-mobile-local-notifications`](https://github.com/Ikromjon1998/nativephp-mobile-local-notifications) v1.1.1 — local notification scheduling with repeating intervals, action buttons, and rich content
+- [`ikromjon/nativephp-mobile-local-notifications`](https://github.com/Ikromjon1998/nativephp-mobile-local-notifications) v1.2.0 — local notification scheduling with repeating intervals, action buttons, and rich content
 
 ## NativePHP Plugin Example
 
@@ -70,6 +73,8 @@ LocalNotifications::schedule([
 git clone https://github.com/Ikromjon1998/daily-habits.git
 cd daily-habits
 composer install && npm install
+cp .env.example .env
+php artisan key:generate
 php artisan migrate --seed
 npm run build
 ```

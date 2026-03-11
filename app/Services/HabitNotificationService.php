@@ -41,7 +41,7 @@ class HabitNotificationService
             'title' => $habit->emoji.' '.$habit->name,
             'body' => $body,
             'subtitle' => $streak > 0 ? "Streak: {$streak} days" : 'Start your streak today!',
-            'at' => $this->calculateTimestamp($habit),
+            'at' => $this->calculateTargetTimestamp($habit),
             'repeat' => RepeatInterval::Daily,
             'sound' => true,
             'data' => ['habit_id' => $habit->id],
@@ -80,7 +80,16 @@ class HabitNotificationService
         return 'habit-'.$habit->id;
     }
 
-    private function calculateTimestamp(Habit $habit): int
+    /**
+     * Calculate the next occurrence as a Unix timestamp.
+     *
+     * Using `at` instead of `delay` ensures the native platform schedules
+     * the notification at an exact clock time. With `repeat: daily`, iOS
+     * uses calendar-based triggers and Android's self-reschedule anchors
+     * to this time — preventing drift that accumulates with delay-based
+     * scheduling.
+     */
+    private function calculateTargetTimestamp(Habit $habit): int
     {
         $parts = explode(':', $habit->reminder_time);
         $hour = (int) $parts[0];
