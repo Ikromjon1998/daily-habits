@@ -1,27 +1,27 @@
-<div class="px-5 py-6" wire:poll.30s>
+<div class="px-5 py-6 page-enter" wire:poll.30s>
     {{-- Header --}}
-    <div class="mb-6">
+    <div class="mb-6 section-enter">
         <h1 class="text-2xl font-bold">Settings</h1>
     </div>
 
     {{-- App Info --}}
-    <div class="bg-gray-900 border border-gray-800/50 rounded-2xl overflow-hidden mb-4">
+    <div class="section-enter bg-gray-900 border border-gray-800/50 rounded-2xl overflow-hidden mb-4" style="animation-delay: 0.05s">
         <div class="px-5 py-4 flex items-center gap-4">
-            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-xl font-bold">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-xl font-bold shadow-lg shadow-violet-600/20">
                 DH
             </div>
             <div>
                 <h2 class="font-semibold">Daily Habits</h2>
-                <p class="text-sm text-gray-400">v1.1.1</p>
+                <p class="text-sm text-gray-400">v1.2.0</p>
             </div>
         </div>
     </div>
 
     {{-- Notifications Section --}}
-    <div class="mb-4">
+    <div class="mb-4 section-enter" style="animation-delay: 0.1s">
         <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-2 mb-2">Notifications</h3>
         <div class="bg-gray-900 border border-gray-800/50 rounded-2xl overflow-hidden">
-            <button wire:click="requestPermission" class="w-full px-5 py-4 flex items-center justify-between active:bg-gray-800/50 transition-colors">
+            <button wire:click="requestPermission" class="card-press w-full px-5 py-4 flex items-center justify-between active:bg-gray-800/50 transition-colors">
                 <div class="flex items-center gap-3">
                     <div class="w-8 h-8 rounded-lg bg-violet-600/20 flex items-center justify-center">
                         <svg class="w-4 h-4 text-violet-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -55,9 +55,9 @@
                     </span>
                 @endif
             </button>
-            
+
             @if($permissionStatus === 'granted')
-            <button wire:click="sendTestNotification" class="w-full px-5 py-3 flex items-center justify-between active:bg-gray-800/50 transition-colors border-t border-gray-800/30">
+            <button wire:click="sendTestNotification" class="card-press w-full px-5 py-3 flex items-center justify-between active:bg-gray-800/50 transition-colors border-t border-gray-800/30">
                 <div class="flex items-center gap-3">
                     <div class="w-8 h-8 rounded-lg bg-green-600/20 flex items-center justify-center">
                         <svg class="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -75,7 +75,7 @@
     </div>
 
     {{-- Stats Section --}}
-    <div class="mb-4">
+    <div class="mb-4 section-enter" style="animation-delay: 0.15s">
         <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-2 mb-2">Statistics</h3>
         <div class="bg-gray-900 border border-gray-800/50 rounded-2xl overflow-hidden divide-y divide-gray-800/50">
             <div class="px-5 py-4 flex items-center justify-between">
@@ -84,17 +84,17 @@
             </div>
             <div class="px-5 py-4 flex items-center justify-between">
                 <span class="text-sm text-gray-300">Completed Today</span>
-                <span class="text-sm font-semibold">{{ $completionsToday }}</span>
+                <span class="text-sm font-semibold {{ $completionsToday > 0 ? 'text-emerald-400' : '' }}">{{ $completionsToday }}</span>
             </div>
             <div class="px-5 py-4 flex items-center justify-between">
                 <span class="text-sm text-gray-300">Longest Streak</span>
-                <span class="text-sm font-semibold">{{ $longestStreak }} {{ $longestStreak === 1 ? 'day' : 'days' }}</span>
+                <span class="text-sm font-semibold {{ $longestStreak >= 7 ? 'text-orange-400' : '' }}">{{ $longestStreak }} {{ $longestStreak === 1 ? 'day' : 'days' }}</span>
             </div>
         </div>
     </div>
 
     {{-- About --}}
-    <div>
+    <div class="section-enter" style="animation-delay: 0.2s">
         <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-2 mb-2">About</h3>
         <div class="bg-gray-900 border border-gray-800/50 rounded-2xl overflow-hidden divide-y divide-gray-800/50">
             <div class="px-5 py-4 flex items-center justify-between">
@@ -103,7 +103,7 @@
             </div>
             <div class="px-5 py-4 flex items-center justify-between">
                 <span class="text-sm text-gray-300">Notifications by</span>
-                <span class="text-sm text-gray-400">local-notifications v1.1.1</span>
+                <span class="text-sm text-gray-400">local-notifications v1.2.0</span>
             </div>
         </div>
     </div>

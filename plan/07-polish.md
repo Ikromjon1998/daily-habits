@@ -1,6 +1,6 @@
 # Epic 7: UI Polish & Final Touches
 
-**Status:** In Progress
+**Status:** Done
 
 ## Description
 
@@ -25,8 +25,9 @@ Final pass on UI polish, animations, empty states, and making the app screenshot
 - Various view files (polish pass)
 - `resources/css/app.css` (animations)
 - `resources/views/layouts/app.blade.php` (timezone detection)
-- `resources/views/livewire/today.blade.php` (live clock, polling)
-- `resources/views/livewire/settings.blade.php` (polling)
+- `resources/views/livewire/today.blade.php` (live clock, polling, animations)
+- `resources/views/livewire/settings.blade.php` (polling, animations)
+- `resources/views/livewire/habit-form.blade.php` (animations)
 - `app/Http/Middleware/ApplyDeviceTimezone.php`
 - `bootstrap/app.php` (middleware registration)
 - `README.md`
@@ -41,6 +42,6 @@ Final pass on UI polish, animations, empty states, and making the app screenshot
 - [x] README documents the project
 - [x] CHANGELOG tracks all releases
 - [x] CONTRIBUTING guide with project structure
-- [ ] App looks polished and professional
-- [ ] Animations feel native and smooth
-- [ ] Screenshots are ready for Twitter/social media
+- [x] App looks polished and professional
+- [x] Animations feel native and smooth
+- [x] Screenshots are ready for Twitter/social media

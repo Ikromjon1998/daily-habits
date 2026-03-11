@@ -8,23 +8,23 @@ All notable changes to Daily Habits are documented in this file.
 
 - **Device timezone detection** — The app now detects the device's timezone via JavaScript (`Intl.DateTimeFormat`) and applies it server-side through the `ApplyDeviceTimezone` middleware. The configured timezone (`Europe/Berlin`) is used as a fallback when the device timezone is unavailable.
 - **Live clock on Today screen** — The header time now updates in real-time using Alpine.js instead of showing a static server-rendered timestamp.
+- **Time-based greeting** — The Today screen header shows "Good morning", "Good afternoon", or "Good evening" based on the current time.
 - **Auto-refreshing UI** — Both the Today and Settings screens use `wire:poll.30s` to keep data (habits, progress, streaks, permission status) up to date without manual navigation.
+- **Page entrance animations** — All screens fade in with a subtle slide-up animation on load.
+- **Staggered list animations** — Habit cards animate in sequentially with a slight delay between each card.
+- **Completion glow effect** — The toggle circle pulses with an emerald glow when a habit is marked complete.
+- **Celebration shimmer** — The progress card shows a shimmer animation when all habits are completed (100%).
+- **FAB entrance animation** — The floating action button bounces in with a spring animation.
 
 ### Changed
 
 - The `device_timezone` cookie is excluded from Laravel's cookie encryption since it is set by client-side JavaScript.
-
-### Files Added
-
-- `app/Http/Middleware/ApplyDeviceTimezone.php`
-- `CHANGELOG.md`
-
-### Files Modified
-
-- `bootstrap/app.php` — Registered `ApplyDeviceTimezone` middleware and cookie encryption exception.
-- `resources/views/layouts/app.blade.php` — Added timezone cookie script.
-- `resources/views/livewire/today.blade.php` — Added Alpine.js clock and `wire:poll.30s`.
-- `resources/views/livewire/settings.blade.php` — Added `wire:poll.30s`.
+- Improved completion checkmark animation with spring physics (cubic-bezier bounce).
+- Habit card tap feedback is more responsive (scale 0.93 vs 0.97).
+- Completed habits dim their emoji for clearer visual distinction.
+- Active frequency button in habit form shows a violet shadow for depth.
+- Stats in Settings use color coding (emerald for completions, orange for streaks).
+- Updated version numbers in Settings to v1.2.0.
 
 ## [1.1.1] - 2026-03-09
 

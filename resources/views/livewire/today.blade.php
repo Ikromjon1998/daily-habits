@@ -1,22 +1,28 @@
-<div class="px-5 py-6" wire:poll.30s>
+<div class="px-5 py-6 page-enter" wire:poll.30s>
     {{-- Header --}}
-    <div class="mb-6">
+    <div class="mb-6 section-enter">
         <p class="text-sm text-gray-400 font-medium">{{ now()->format('l, M j') }}</p>
         <p class="text-3xl font-bold mt-1"
-           x-data="{ time: '' }"
+           x-data="{ time: '', greeting: '' }"
            x-init="
-               const tick = () => time = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-               tick();
-               setInterval(tick, 10000);
-           "
-           x-text="time">
-            {{ now()->format('g:i A') }}
+               const update = () => {
+                   const now = new Date();
+                   time = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+                   const h = now.getHours();
+                   greeting = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+               };
+               update();
+               setInterval(update, 10000);
+           ">
+            <span class="text-lg text-gray-400 font-medium block" x-text="greeting">Good morning</span>
+            <span x-text="time">{{ now()->format('g:i A') }}</span>
         </p>
     </div>
 
     @if($total > 0)
         {{-- Progress Summary --}}
-        <div class="bg-gradient-to-br from-violet-600/20 to-indigo-600/20 border border-violet-500/20 rounded-2xl p-5 mb-6">
+        <div class="section-enter {{ $percentage === 100 ? 'celebration-shimmer' : '' }} bg-gradient-to-br from-violet-600/20 to-indigo-600/20 border border-violet-500/20 rounded-2xl p-5 mb-6"
+             style="animation-delay: 0.05s">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-violet-300/80 font-medium">Daily Progress</p>
@@ -44,7 +50,7 @@
             </div>
 
             @if($percentage === 100)
-                <p class="text-sm text-emerald-400/80 font-medium mt-3">All done for today!</p>
+                <p class="text-sm text-emerald-400 font-medium mt-3 fade-in">All done for today!</p>
             @endif
         </div>
 
@@ -59,7 +65,7 @@
                     $dayLabels = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
                 @endphp
 
-                <div wire:key="habit-{{ $habit->id }}" class="space-y-0">
+                <div wire:key="habit-{{ $habit->id }}" class="slide-up" style="animation-delay: {{ $loop->index * 0.06 }}s">
                     {{-- Milestone Banner --}}
                     @if($milestone)
                         <div class="mx-2 mb-1 px-3 py-1.5 rounded-t-xl bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-b-0 border-amber-500/30 flex items-center gap-2">
@@ -68,15 +74,15 @@
                         </div>
                     @endif
 
-                    <div class="bg-gray-900 border rounded-2xl p-4 transition-all
+                    <div class="bg-gray-900 border rounded-2xl p-4 transition-all duration-300
                                 {{ $isCompleted ? 'border-emerald-500/30 bg-emerald-950/20' : 'border-gray-800/50' }}
                                 {{ $milestone ? 'rounded-t-lg' : '' }}">
 
                         <div class="flex items-center gap-4">
                             {{-- Toggle area --}}
                             <button wire:click="toggleHabit({{ $habit->id }})"
-                                    class="habit-card flex-shrink-0 w-10 h-10 rounded-full border-2 flex items-center justify-center transition-all
-                                           {{ $isCompleted ? 'border-emerald-500 bg-emerald-500/20' : 'border-gray-600 active:border-violet-400' }}">
+                                    class="habit-card flex-shrink-0 w-10 h-10 rounded-full border-2 flex items-center justify-center transition-all duration-300
+                                           {{ $isCompleted ? 'border-emerald-500 bg-emerald-500/20 glow-complete' : 'border-gray-600 active:border-violet-400' }}">
                                 @if($isCompleted)
                                     <svg class="w-5 h-5 text-emerald-400 check-animate" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
@@ -92,11 +98,11 @@
                             </button>
 
                             {{-- Emoji --}}
-                            <span class="text-2xl flex-shrink-0">{{ $habit->emoji }}</span>
+                            <span class="text-2xl flex-shrink-0 transition-transform duration-300 {{ $isCompleted ? 'scale-90 opacity-60' : '' }}">{{ $habit->emoji }}</span>
 
                             {{-- Info --}}
                             <div class="flex-1 min-w-0">
-                                <p class="font-semibold text-[15px] truncate {{ $isCompleted ? 'text-gray-400 line-through' : 'text-white' }}">
+                                <p class="font-semibold text-[15px] truncate transition-colors duration-300 {{ $isCompleted ? 'text-gray-500 line-through' : 'text-white' }}">
                                     {{ $habit->name }}
                                 </p>
                                 @if($habit->description)
@@ -125,7 +131,7 @@
 
                             {{-- Edit button --}}
                             <a href="/habits/{{ $habit->id }}/edit" wire:navigate
-                               class="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-gray-500 active:bg-gray-800 active:text-gray-300 transition-colors">
+                               class="card-press flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-gray-500 active:bg-gray-800 active:text-gray-300 transition-colors">
                                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125" />
                                 </svg>
@@ -143,7 +149,7 @@
                                     <span class="text-[9px] font-medium {{ $isToday ? 'text-violet-400' : 'text-gray-600' }}">
                                         {{ $dayLabels[$loop->index] }}
                                     </span>
-                                    <div class="w-5 h-5 rounded-full flex items-center justify-center
+                                    <div class="w-5 h-5 rounded-full flex items-center justify-center transition-all duration-300
                                         @if($done)
                                             @if($streak >= 30) bg-red-500/30 ring-1 ring-red-500/50
                                             @elseif($streak >= 7) bg-orange-500/30 ring-1 ring-orange-500/50
@@ -173,7 +179,7 @@
 
         {{-- FAB --}}
         <a href="/habits/create" wire:navigate
-           class="fixed right-5 bottom-24 w-14 h-14 bg-violet-600 hover:bg-violet-500 active:bg-violet-700 rounded-full flex items-center justify-center shadow-lg shadow-violet-600/30 transition-colors"
+           class="fab-enter fixed right-5 bottom-24 w-14 h-14 bg-violet-600 active:bg-violet-700 rounded-full flex items-center justify-center shadow-lg shadow-violet-600/30 transition-transform active:scale-90"
            style="margin-bottom: var(--inset-bottom, 0px);">
             <svg class="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -182,7 +188,7 @@
 
     @else
         {{-- Empty State --}}
-        <div class="flex flex-col items-center justify-center py-16 text-center">
+        <div class="flex flex-col items-center justify-center py-16 text-center page-enter">
             <div class="w-20 h-20 rounded-full bg-gray-800/50 flex items-center justify-center mb-4">
                 <svg class="w-10 h-10 text-gray-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -191,7 +197,7 @@
             <h3 class="text-lg font-semibold text-gray-300 mb-1">No habits yet</h3>
             <p class="text-sm text-gray-500 max-w-[240px]">Start building better routines by adding your first habit.</p>
             <a href="/habits/create" wire:navigate
-               class="mt-6 px-6 py-3 bg-violet-600 hover:bg-violet-500 active:bg-violet-700 text-white text-sm font-semibold rounded-xl transition-colors">
+               class="mt-6 px-6 py-3 bg-violet-600 active:bg-violet-700 text-white text-sm font-semibold rounded-xl transition-transform active:scale-95">
                 Add Your First Habit
             </a>
         </div>
