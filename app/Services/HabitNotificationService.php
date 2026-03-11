@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Habit;
+use Ikromjon\LocalNotifications\Enums\RepeatInterval;
 use Ikromjon\LocalNotifications\Facades\LocalNotifications;
 
 class HabitNotificationService
@@ -22,8 +23,8 @@ class HabitNotificationService
             'title' => $habit->emoji.' '.$habit->name,
             'body' => $body,
             'subtitle' => $streak > 0 ? "Streak: {$streak} days" : 'Start your streak today!',
-            'delay' => $this->calculateDelay($habit),
-            'repeat' => 'daily',
+            'at' => $this->calculateTargetTimestamp($habit),
+            'repeat' => RepeatInterval::Daily,
             'sound' => true,
             'data' => ['habit_id' => $habit->id],
             'actions' => [
@@ -61,7 +62,16 @@ class HabitNotificationService
         return 'habit-'.$habit->id;
     }
 
-    private function calculateDelay(Habit $habit): int
+    /**
+     * Calculate the next occurrence as a Unix timestamp.
+     *
+     * Using `at` instead of `delay` ensures the native platform schedules
+     * the notification at an exact clock time. With `repeat: daily`, iOS
+     * uses calendar-based triggers and Android's self-reschedule anchors
+     * to this time — preventing drift that accumulates with delay-based
+     * scheduling.
+     */
+    private function calculateTargetTimestamp(Habit $habit): int
     {
         $parts = explode(':', $habit->reminder_time);
         $hour = (int) $parts[0];
@@ -75,6 +85,6 @@ class HabitNotificationService
             $target->addDay();
         }
 
-        return (int) $now->diffInSeconds($target);
+        return (int) $target->timestamp;
     }
 }

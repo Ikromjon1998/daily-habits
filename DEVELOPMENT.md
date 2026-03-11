@@ -45,14 +45,15 @@ plan/               # Epic documents
 
 ```php
 use Ikromjon\LocalNotifications\Facades\LocalNotifications;
+use Ikromjon\LocalNotifications\Enums\RepeatInterval;
 
 LocalNotifications::schedule([
     'id' => 'habit-1',
     'title' => 'Habit Reminder',
     'body' => 'Time to do your habit!',
     'subtitle' => 'Streak: 5 days',
-    'delay' => 60,
-    'repeat' => 'daily',        // minute|hourly|daily|weekly
+    'at' => now()->setTime(9, 0)->timestamp,
+    'repeat' => RepeatInterval::Daily,
     'sound' => true,
     'badge' => 1,
     'data' => ['habit_id' => 1],

@@ -12,7 +12,7 @@
             </div>
             <div>
                 <h2 class="font-semibold">Daily Habits</h2>
-                <p class="text-sm text-gray-400">v1.0.0</p>
+                <p class="text-sm text-gray-400">v1.1.1</p>
             </div>
         </div>
     </div>
@@ -87,7 +87,7 @@
             </div>
             <div class="px-5 py-4 flex items-center justify-between">
                 <span class="text-sm text-gray-300">Notifications by</span>
-                <span class="text-sm text-gray-400">local-notifications v1.1.0</span>
+                <span class="text-sm text-gray-400">local-notifications v1.1.1</span>
             </div>
         </div>
     </div>

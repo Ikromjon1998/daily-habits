@@ -23,7 +23,7 @@ body {
     user-select: none;
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
-    overscroll-behavior: none;
+    overscroll-behavior-x: none;
 }
 
 /* Allow text selection in inputs */
@@ -33,9 +33,12 @@ input, textarea {
 }
 
 /* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
 main {
     -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
 }
 
 /* Habit card tap animation */

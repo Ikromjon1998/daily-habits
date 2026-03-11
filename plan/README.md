@@ -27,6 +27,6 @@ A clean, polished habits app where users can:
 
 - Laravel 12 + Livewire 4
 - NativePHP Mobile v3
-- `ikromjon/nativephp-mobile-local-notifications` v1.1.0
+- `ikromjon/nativephp-mobile-local-notifications` v1.1.1
 - Tailwind CSS 4
 - SQLite
