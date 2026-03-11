@@ -2,36 +2,36 @@
 
 All notable changes to Daily Habits are documented in this file.
 
-## [Unreleased]
+## [1.3.0] - 2026-03-11
 
 ### Added
 
-- **Device timezone detection** — The app now detects the device's timezone via JavaScript (`Intl.DateTimeFormat`) and applies it server-side through the `ApplyDeviceTimezone` middleware. The configured timezone (`Europe/Berlin`) is used as a fallback when the device timezone is unavailable.
-- **Live clock on Today screen** — The header time now updates in real-time using Alpine.js instead of showing a static server-rendered timestamp.
-- **Time-based greeting** — The Today screen header shows "Good morning", "Good afternoon", or "Good evening" based on the current time.
-- **Auto-refreshing UI** — Both the Today and Settings screens use `wire:poll.30s` to keep data (habits, progress, streaks, permission status) up to date without manual navigation.
-- **Page entrance animations** — All screens fade in with a subtle slide-up animation on load.
-- **Staggered list animations** — Habit cards animate in sequentially with a slight delay between each card.
-- **Completion glow effect** — The toggle circle pulses with an emerald glow when a habit is marked complete.
-- **Celebration shimmer** — The progress card shows a shimmer animation when all habits are completed (100%).
-- **FAB entrance animation** — The floating action button bounces in with a spring animation.
-- **Frequency-aware notifications** — Weekday habits now only fire Mon–Fri (`repeatDays: [1,2,3,4,5]`), weekend habits only Sat–Sun (`repeatDays: [6,7]`). Previously all habits fired daily regardless of frequency setting.
-- **iOS badge count** — App icon badge shows the number of incomplete habits for today.
-- **Expanded notification content** — `bigText` shows habit description and streak motivation when the notification is expanded.
-- **Type-safe notification DTOs** — All notification scheduling uses `NotificationOptions` and `NotificationAction` DTOs instead of raw arrays.
-- **13 new notification tests** — Full test coverage for frequency scheduling, DTOs, badge, bigText, snooze, and cancel (57 tests total).
+- **Device timezone detection** — Detects the device's timezone via JavaScript (`Intl.DateTimeFormat`) and applies it server-side through the `ApplyDeviceTimezone` middleware. Configured timezone (`Europe/Berlin`) used as fallback.
+- **Live clock on Today screen** — Header time updates in real-time using Alpine.js.
+- **Time-based greeting** — "Good morning", "Good afternoon", or "Good evening" based on current time.
+- **Auto-refreshing UI** — Today and Settings screens use `wire:poll.30s` for live data.
+- **Page entrance animations** — All screens fade in with slide-up animation.
+- **Staggered list animations** — Habit cards animate in sequentially.
+- **Completion glow effect** — Toggle circle pulses with emerald glow on completion.
+- **Celebration shimmer** — Progress card shimmers when all habits completed (100%).
+- **FAB entrance animation** — Floating action button bounces in with spring animation.
+- **Frequency-aware notifications** — Weekday habits only fire Mon–Fri (`repeatDays: [1,2,3,4,5]`), weekend habits only Sat–Sun (`repeatDays: [6,7]`). Previously all habits fired daily regardless of frequency.
+- **iOS badge count** — App icon badge shows number of incomplete habits for today.
+- **Expanded notification content** — `bigText` shows description + streak motivation when expanded. Always includes motivational text, even at 0 streak.
+- **Type-safe notification DTOs** — All scheduling uses `NotificationOptions` and `NotificationAction` DTOs.
 - **`Habit::incompleteCountToday()`** — Static helper for counting remaining habits.
+- **13 new notification tests** — Full coverage for frequency scheduling, DTOs, badge, bigText, snooze, and cancel (57 tests total).
 
 ### Changed
 
-- The `device_timezone` cookie is excluded from Laravel's cookie encryption since it is set by client-side JavaScript.
-- Improved completion checkmark animation with spring physics (cubic-bezier bounce).
-- Habit card tap feedback is more responsive (scale 0.93 vs 0.97).
+- Notification body now shows streak motivation (collapsed view) instead of the habit description.
+- Notification subtitle shows frequency label ("Daily"/"Weekdays"/"Weekends") at 0 streak instead of "Start your streak today!".
+- Test notification in Settings now uses `HabitNotificationService` for full end-to-end testing with DTOs, badge, and bigText.
+- Upgraded `ikromjon/nativephp-mobile-local-notifications` from `^1.1` to `^1.2`.
+- Improved completion checkmark animation with spring physics.
+- Habit card tap feedback more responsive (scale 0.93 vs 0.97).
 - Completed habits dim their emoji for clearer visual distinction.
-- Active frequency button in habit form shows a violet shadow for depth.
 - Stats in Settings use color coding (emerald for completions, orange for streaks).
-- Updated version numbers in Settings to v1.2.0.
-- Upgraded `ikromjon/nativephp-mobile-local-notifications` constraint from `^1.1` to `^1.2`.
 
 ## [1.1.1] - 2026-03-09
 

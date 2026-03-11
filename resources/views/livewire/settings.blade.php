@@ -12,7 +12,7 @@
             </div>
             <div>
                 <h2 class="font-semibold">Daily Habits</h2>
-                <p class="text-sm text-gray-400">v1.2.0</p>
+                <p class="text-sm text-gray-400">v1.3.0</p>
             </div>
         </div>
     </div>
