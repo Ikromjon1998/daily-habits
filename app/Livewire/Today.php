@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Habit;
 use App\Services\HabitNotificationService;
 use Ikromjon\LocalNotifications\Events\NotificationActionPressed;
+use Ikromjon\LocalNotifications\Events\NotificationTapped;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Component;
@@ -16,6 +17,15 @@ class Today extends Component
     {
         $habit = Habit::findOrFail($habitId);
         $habit->toggleToday();
+    }
+
+    /** @param  array{id?: string, title?: string, body?: string, data?: array<string, mixed>}  $data */
+    #[OnNative(NotificationTapped::class)]
+    public function onNotificationTapped(array $data = []): void
+    {
+        // Notification tap received — the app is already open at this point.
+        // Log it so we can verify the event fires on device.
+        logger()->info('NotificationTapped event received', $data);
     }
 
     /** @param  array{notificationId?: string, actionId?: string}  $data */

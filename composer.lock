@@ -1278,20 +1278,20 @@
         },
         {
             "name": "ikromjon/nativephp-mobile-local-notifications",
-            "version": "v1.2.0",
+            "version": "v1.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Ikromjon1998/nativephp-mobile-local-notifications.git",
-                "reference": "909653fd888e435e998c657b9e25b1a1af2eafc3"
+                "reference": "0ed75aea28e9f85520cb1982ae5d19abbd0fd3fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Ikromjon1998/nativephp-mobile-local-notifications/zipball/909653fd888e435e998c657b9e25b1a1af2eafc3",
-                "reference": "909653fd888e435e998c657b9e25b1a1af2eafc3",
+                "url": "https://api.github.com/repos/Ikromjon1998/nativephp-mobile-local-notifications/zipball/0ed75aea28e9f85520cb1982ae5d19abbd0fd3fa",
+                "reference": "0ed75aea28e9f85520cb1982ae5d19abbd0fd3fa",
                 "shasum": ""
             },
             "require": {
-                "nativephp/mobile": "*",
+                "nativephp/mobile": "^3.0",
                 "php": "^8.3"
             },
             "require-dev": {
@@ -1334,9 +1334,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Ikromjon1998/nativephp-mobile-local-notifications/issues",
-                "source": "https://github.com/Ikromjon1998/nativephp-mobile-local-notifications/tree/v1.2.0"
+                "source": "https://github.com/Ikromjon1998/nativephp-mobile-local-notifications/tree/v1.3.2"
             },
-            "time": "2026-03-11T03:05:09+00:00"
+            "time": "2026-03-16T19:08:38+00:00"
         },
         {
             "name": "laravel/framework",
