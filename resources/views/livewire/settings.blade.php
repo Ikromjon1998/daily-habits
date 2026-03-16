@@ -126,7 +126,7 @@
             </div>
             <div class="px-5 py-4 flex items-center justify-between">
                 <span class="text-sm text-gray-300">Notifications by</span>
-                <span class="text-sm text-gray-400">local-notifications v1.2.0</span>
+                <span class="text-sm text-gray-400">local-notifications v1.3.4</span>
             </div>
         </div>
     </div>
