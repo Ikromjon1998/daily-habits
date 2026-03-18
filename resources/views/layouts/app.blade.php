@@ -39,7 +39,20 @@
     </nav>
 
     @livewireScripts
+    {{-- Flush cold-start notification tap events AFTER Livewire components are hydrated --}}
     <script>
+        (function () {
+            function flush() {
+                fetch('/_native/api/call', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ method: 'LocalNotifications.CheckPermission', params: {} }),
+                }).catch(function () {});
+            }
+            document.addEventListener('livewire:navigated', function () {
+                setTimeout(flush, 300);
+            }, { once: true });
+        })();
         document.cookie = 'device_timezone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + ';path=/;max-age=31536000;SameSite=Lax';
     </script>
 </body>

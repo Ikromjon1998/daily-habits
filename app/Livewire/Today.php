@@ -13,19 +13,25 @@ use Native\Mobile\Attributes\OnNative;
 
 class Today extends Component
 {
+    public string $tapBanner = '';
+
+    public function dismissBanner(): void
+    {
+        $this->tapBanner = '';
+    }
+
     public function toggleHabit(int $habitId): void
     {
         $habit = Habit::findOrFail($habitId);
         $habit->toggleToday();
     }
 
-    /** @param  array{id?: string, title?: string, body?: string, data?: array<string, mixed>}  $data */
+    /** @param  array<string, mixed>  $data */
     #[OnNative(NotificationTapped::class)]
-    public function onNotificationTapped(array $data = []): void
+    public function onNotificationTapped(string $id = '', string $title = '', string $body = '', array $data = []): void
     {
-        // Notification tap received — the app is already open at this point.
-        // Log it so we can verify the event fires on device.
-        logger()->info('NotificationTapped event received', $data);
+        $this->tapBanner = "Tapped: {$title} (id: {$id})";
+        logger()->info('NotificationTapped event received', ['id' => $id, 'title' => $title, 'body' => $body, 'data' => $data]);
     }
 
     /** @param  array{notificationId?: string, actionId?: string}  $data */

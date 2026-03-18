@@ -1,4 +1,57 @@
 <div class="px-5 py-6 page-enter" wire:poll.30s>
+    {{-- Notification Tap Banner (Livewire) --}}
+    @if($tapBanner)
+        <div class="mb-4 px-4 py-3 bg-orange-500/20 border border-orange-500/30 rounded-xl flex items-center justify-between">
+            <div class="flex items-center gap-2 min-w-0">
+                <span class="text-orange-400 flex-shrink-0">&#x1F514;</span>
+                <p class="text-sm text-orange-300 truncate">{{ $tapBanner }}</p>
+            </div>
+            <button wire:click="dismissBanner" class="text-orange-400/60 active:text-orange-300 flex-shrink-0 ml-2">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+    @endif
+
+    {{-- Debug Panel --}}
+    <div class="mb-4 px-4 py-3 bg-gray-900 border border-gray-800/50 rounded-xl text-xs font-mono"
+         x-data="{
+             logs: [],
+             add(msg) {
+                 const t = new Date().toLocaleTimeString('en-US', {hour12:false});
+                 this.logs.unshift(t + ' ' + msg);
+                 if (this.logs.length > 20) this.logs.pop();
+             }
+         }"
+         x-init="
+             add('page loaded, readyState=' + document.readyState);
+             add('Livewire=' + (typeof window.Livewire !== 'undefined' ? 'yes' : 'no'));
+
+             document.addEventListener('livewire:init', () => add('livewire:init fired'));
+             document.addEventListener('livewire:navigated', () => add('livewire:navigated fired'));
+
+             if (window.Livewire && window.Livewire.on) {
+                 window.Livewire.on('native:Ikromjon\\LocalNotifications\\Events\\NotificationTapped', (data) => {
+                     add('JS GOT NotificationTapped: ' + JSON.stringify(data));
+                 });
+             }
+
+             document.addEventListener('livewire:init', () => {
+                 if (window.Livewire && window.Livewire.on) {
+                     window.Livewire.on('native:Ikromjon\\LocalNotifications\\Events\\NotificationTapped', (data) => {
+                         add('JS GOT NotificationTapped (after init): ' + JSON.stringify(data));
+                     });
+                 }
+             });
+         ">
+        <p class="text-gray-500 font-semibold mb-1">Debug Log</p>
+        <template x-for="(log, i) in logs" :key="i">
+            <p class="text-gray-400 leading-relaxed" x-text="log"></p>
+        </template>
+        <p x-show="logs.length === 0" class="text-gray-600">Waiting for events...</p>
+    </div>
+
     {{-- Header --}}
     <div class="mb-6 section-enter">
         <p class="text-sm text-gray-400 font-medium">{{ now()->format('l, M j') }}</p>
