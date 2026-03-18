@@ -5,7 +5,7 @@
 
 A mobile daily habits tracker built with Laravel, Livewire, and NativePHP Mobile. Runs natively on Android and iOS — no server required, everything works offline.
 
-This project is open source and serves as a real-world example of building a native mobile app with the Laravel/PHP ecosystem, including how to integrate NativePHP Mobile plugins like local notifications.
+This project is open source and serves as a real-world example of building a native mobile app with the Laravel/PHP ecosystem. It is also the primary test app for NativePHP Mobile notification plugins — cold-start tap events, warm-start detection, action buttons, and Livewire 4 SPA compatibility are all tested here on real devices.
 
 ## Screenshots
 
@@ -39,7 +39,7 @@ This project is open source and serves as a real-world example of building a nat
 - **Tailwind CSS 4** — dark theme with safe area inset support
 - **Alpine.js** — lightweight client-side interactivity (bundled with Livewire)
 - **SQLite** — local on-device database
-- [`ikromjon/nativephp-mobile-local-notifications`](https://github.com/Ikromjon1998/nativephp-mobile-local-notifications) v1.2.0 — local notification scheduling with repeating intervals, action buttons, and rich content
+- [`ikromjon/nativephp-mobile-local-notifications`](https://github.com/Ikromjon1998/nativephp-mobile-local-notifications) v1.4.1 — local notification scheduling with repeating intervals, action buttons, cold-start tap events, and rich content
 
 ## How It Works
 
