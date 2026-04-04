@@ -3,7 +3,7 @@
     <div class="mb-4 section-enter flex items-center justify-between">
         <div>
             <h1 class="text-2xl font-bold">Notification Debug</h1>
-            <p class="text-xs text-gray-500 mt-1">Plugin v1.3.2 — Event Tap Fix</p>
+            <p class="text-xs text-gray-500 mt-1">Plugin v1.6.0 — Update + Refactor</p>
         </div>
         <a href="/settings" wire:navigate class="text-xs text-violet-400 font-medium px-3 py-1.5 rounded-lg bg-violet-500/10">
             Back
@@ -27,6 +27,17 @@
     {{-- Test Scenarios --}}
     <div class="mb-4 section-enter" style="animation-delay: 0.1s">
         <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-2 mb-2">Test Scenarios</h3>
+
+        {{-- How to test guide --}}
+        <div class="bg-gray-900/50 border border-gray-800/30 rounded-2xl px-5 py-4 mb-3">
+            <p class="text-xs font-semibold text-gray-400 mb-2">How to test</p>
+            <p class="text-[11px] text-gray-500 leading-relaxed">
+                Run scenarios in order: start with #6 (instant), then #5 (15s), then #4 (60s).
+                Run #1 while waiting for #4. Save #2 and #3 for last (require killing the app).
+                After each test, check the Event Log below for expected events. Use "Copy Log" to share results.
+            </p>
+        </div>
+
         <div class="bg-gray-900 border border-gray-800/50 rounded-2xl overflow-hidden divide-y divide-gray-800/30">
 
             {{-- Scenario 1: Warm start --}}
@@ -35,12 +46,15 @@
                     <div class="w-10 h-10 rounded-xl bg-green-600/20 flex items-center justify-center text-lg">1</div>
                     <div class="flex-1">
                         <p class="text-sm font-semibold text-green-400">Warm Start (10s)</p>
-                        <p class="text-xs text-gray-500 mt-0.5">Keep app open. Tap notification when it arrives.</p>
+                        <p class="text-xs text-gray-500 mt-0.5">Tests: schedule, receive, and tap while app is open.</p>
                     </div>
                 </div>
-                <p class="text-xs text-gray-600 mt-2 ml-13">
-                    Expected: NotificationReceived + NotificationTapped appear in log below
-                </p>
+                <div class="mt-2 ml-13 space-y-1">
+                    <p class="text-[11px] text-gray-500">1. Tap this button</p>
+                    <p class="text-[11px] text-gray-500">2. Keep the app open and wait 10 seconds</p>
+                    <p class="text-[11px] text-gray-500">3. When the notification appears, tap it</p>
+                    <p class="text-[11px] text-green-700">Pass: NotificationScheduled, NotificationReceived, and NotificationTapped all appear in log</p>
+                </div>
             </button>
 
             {{-- Scenario 2: Cold start --}}
@@ -49,12 +63,16 @@
                     <div class="w-10 h-10 rounded-xl bg-orange-600/20 flex items-center justify-center text-lg">2</div>
                     <div class="flex-1">
                         <p class="text-sm font-semibold text-orange-400">Cold Start (30s)</p>
-                        <p class="text-xs text-gray-500 mt-0.5">Press, then KILL the app. Tap notification to relaunch.</p>
+                        <p class="text-xs text-gray-500 mt-0.5">Tests: tap detection when app was killed (cold start).</p>
                     </div>
                 </div>
-                <p class="text-xs text-gray-600 mt-2 ml-13">
-                    Expected: App opens here, NotificationTapped appears in log (this was the bug)
-                </p>
+                <div class="mt-2 ml-13 space-y-1">
+                    <p class="text-[11px] text-gray-500">1. Tap this button</p>
+                    <p class="text-[11px] text-gray-500">2. Kill the app (swipe away from recents)</p>
+                    <p class="text-[11px] text-gray-500">3. Wait 30 seconds for the notification</p>
+                    <p class="text-[11px] text-gray-500">4. Tap the notification to relaunch the app</p>
+                    <p class="text-[11px] text-green-700">Pass: App reopens to this page, NotificationTapped appears in log</p>
+                </div>
             </button>
 
             {{-- Scenario 3: Action buttons cold start --}}
@@ -63,12 +81,70 @@
                     <div class="w-10 h-10 rounded-xl bg-red-600/20 flex items-center justify-center text-lg">3</div>
                     <div class="flex-1">
                         <p class="text-sm font-semibold text-red-400">Action Buttons + Cold (30s)</p>
-                        <p class="text-xs text-gray-500 mt-0.5">Kill app, then press Confirm or Dismiss on the notification.</p>
+                        <p class="text-xs text-gray-500 mt-0.5">Tests: action button press after app is killed.</p>
                     </div>
                 </div>
-                <p class="text-xs text-gray-600 mt-2 ml-13">
-                    Expected: NotificationActionPressed with actionId in log
-                </p>
+                <div class="mt-2 ml-13 space-y-1">
+                    <p class="text-[11px] text-gray-500">1. Tap this button</p>
+                    <p class="text-[11px] text-gray-500">2. Kill the app (swipe away from recents)</p>
+                    <p class="text-[11px] text-gray-500">3. Wait 30 seconds for the notification</p>
+                    <p class="text-[11px] text-gray-500">4. Pull down the notification to expand it</p>
+                    <p class="text-[11px] text-gray-500">5. Press "Confirm" or "Dismiss" action button</p>
+                    <p class="text-[11px] text-green-700">Pass: NotificationActionPressed with correct actionId ("confirm" or "dismiss") in log</p>
+                </div>
+            </button>
+
+            {{-- Scenario 4: Update content --}}
+            <button wire:click="scheduleUpdateContentTest" class="card-press w-full px-5 py-4 active:bg-gray-800/50 transition-colors text-left">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-cyan-600/20 flex items-center justify-center text-lg">4</div>
+                    <div class="flex-1">
+                        <p class="text-sm font-semibold text-cyan-400">Update Content (60s)</p>
+                        <p class="text-xs text-gray-500 mt-0.5">Tests: updating title/body while preserving original timing.</p>
+                    </div>
+                </div>
+                <div class="mt-2 ml-13 space-y-1">
+                    <p class="text-[11px] text-gray-500">1. Tap this button (schedules with "ORIGINAL Title", then updates to "UPDATED Title")</p>
+                    <p class="text-[11px] text-gray-500">2. Check log: you should see Scheduled + Updated entries immediately</p>
+                    <p class="text-[11px] text-gray-500">3. Wait 60 seconds for the notification to arrive</p>
+                    <p class="text-[11px] text-gray-500">4. Check the notification content</p>
+                    <p class="text-[11px] text-green-700">Pass: Notification shows "UPDATED Title" (not "ORIGINAL"). Fires at 60s (timing preserved). NotificationUpdated event in log.</p>
+                </div>
+            </button>
+
+            {{-- Scenario 5: Update timing --}}
+            <button wire:click="scheduleUpdateTimingTest" class="card-press w-full px-5 py-4 active:bg-gray-800/50 transition-colors text-left">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-purple-600/20 flex items-center justify-center text-lg">5</div>
+                    <div class="flex-1">
+                        <p class="text-sm font-semibold text-purple-400">Update Timing (120s -> 15s)</p>
+                        <p class="text-xs text-gray-500 mt-0.5">Tests: rescheduling a notification to fire sooner.</p>
+                    </div>
+                </div>
+                <div class="mt-2 ml-13 space-y-1">
+                    <p class="text-[11px] text-gray-500">1. Tap this button (schedules at 120s, then updates delay to 15s)</p>
+                    <p class="text-[11px] text-gray-500">2. Check log: you should see Scheduled + Updated entries</p>
+                    <p class="text-[11px] text-gray-500">3. Wait ~15 seconds</p>
+                    <p class="text-[11px] text-green-700">Pass: Notification fires in ~15s (not 120s). NotificationUpdated event in log.</p>
+                    <p class="text-[11px] text-red-700">Fail: If notification takes 120s, the timing update didn't work.</p>
+                </div>
+            </button>
+
+            {{-- Scenario 6: getPending + cancel --}}
+            <button wire:click="testGetPending" class="card-press w-full px-5 py-4 active:bg-gray-800/50 transition-colors text-left">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-yellow-600/20 flex items-center justify-center text-lg">6</div>
+                    <div class="flex-1">
+                        <p class="text-sm font-semibold text-yellow-400">Schedule + Cancel + GetPending</p>
+                        <p class="text-xs text-gray-500 mt-0.5">Tests: schedule, getPending, cancel, and getPending again (instant result).</p>
+                    </div>
+                </div>
+                <div class="mt-2 ml-13 space-y-1">
+                    <p class="text-[11px] text-gray-500">1. Tap this button (all steps run automatically)</p>
+                    <p class="text-[11px] text-gray-500">2. Check the log immediately for 4 entries</p>
+                    <p class="text-[11px] text-green-700">Pass: First GetPending shows count: 2 with both notifications. Second GetPending shows count: 0 after cancel.</p>
+                    <p class="text-[11px] text-red-700">Fail: If GetPending count doesn't match or cancel doesn't remove entries.</p>
+                </div>
             </button>
         </div>
     </div>
@@ -78,7 +154,20 @@
         <div class="flex items-center justify-between px-2 mb-2">
             <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Event Log</h3>
             @if(count($eventLog) > 0)
-                <button wire:click="clearLog" class="text-xs text-gray-600 hover:text-gray-400">Clear</button>
+                <div class="flex items-center gap-3">
+                    <button
+                        x-data="{ copied: false }"
+                        x-on:click="
+                            const logs = @js($eventLog).map(e => `[${e.time}] ${e.event}: ${e.data}`).join('\n');
+                            navigator.clipboard.writeText(logs).then(() => { copied = true; setTimeout(() => copied = false, 2000) });
+                        "
+                        class="text-xs text-cyan-500 hover:text-cyan-400"
+                    >
+                        <span x-show="!copied">Copy Log</span>
+                        <span x-show="copied" x-cloak>Copied!</span>
+                    </button>
+                    <button wire:click="clearLog" class="text-xs text-gray-600 hover:text-gray-400">Clear</button>
+                </div>
             @endif
         </div>
 
@@ -91,8 +180,10 @@
                             @if(str_contains($entry['event'], 'Tapped')) text-orange-400
                             @elseif(str_contains($entry['event'], 'ActionPressed')) text-red-400
                             @elseif(str_contains($entry['event'], 'Received')) text-blue-400
+                            @elseif(str_contains($entry['event'], 'Updated')) text-cyan-400
                             @elseif(str_contains($entry['event'], 'Scheduled')) text-green-400
                             @elseif(str_contains($entry['event'], 'Permission')) text-violet-400
+                            @elseif(str_contains($entry['event'], 'Cancelled') || str_contains($entry['event'], 'GetPending')) text-yellow-400
                             @else text-gray-400
                             @endif
                         ">
