@@ -20,7 +20,8 @@ This project is open source and serves as a real-world example of building a nat
 - Create daily habits with emoji icons, descriptions, and reminder times
 - Frequency options: daily, weekdays, or weekends
 - Native push notifications with daily repeating reminders
-- Mark habits complete directly from notification action buttons (Done / Snooze)
+- Mark habits complete directly from notification action buttons (Done / Skip / Snooze)
+- Laravel Notification channel integration — schedule via `$notifiable->notify()`
 - Track completion streaks with color-coded visual feedback
 - Weekly calendar dots (Mon–Sun) on each habit card
 - Streak milestone banners (7-day, 30-day, 100-day)
@@ -39,7 +40,7 @@ This project is open source and serves as a real-world example of building a nat
 - **Tailwind CSS 4** — dark theme with safe area inset support
 - **Alpine.js** — lightweight client-side interactivity (bundled with Livewire)
 - **SQLite** — local on-device database
-- [`ikromjon/nativephp-mobile-local-notifications`](https://github.com/Ikromjon1998/nativephp-mobile-local-notifications) v1.4.1 — local notification scheduling with repeating intervals, action buttons, cold-start tap events, and rich content
+- [`ikromjon/nativephp-mobile-local-notifications`](https://github.com/Ikromjon1998/nativephp-mobile-local-notifications) v1.7.0 — local notification scheduling with repeating intervals, action buttons, cold-start tap events, rich content, and Laravel Notification channel integration
 
 ## How It Works
 
@@ -81,6 +82,59 @@ LocalNotifications::schedule([
     ],
 ]);
 ```
+
+### Laravel Notification Channel
+
+The app includes a working example of the Laravel Notification channel integration. Instead of calling `LocalNotifications::schedule()` directly, you can use Laravel's standard notification pattern:
+
+```php
+// app/Notifications/DebugLocalNotification.php
+use Ikromjon\LocalNotifications\Notifications\HasLocalNotification;
+use Ikromjon\LocalNotifications\Notifications\LocalNotificationChannel;
+use Ikromjon\LocalNotifications\Notifications\LocalNotificationMessage;
+use Illuminate\Notifications\Notification;
+
+class DebugLocalNotification extends Notification implements HasLocalNotification
+{
+    public function via(object $notifiable): array
+    {
+        return [LocalNotificationChannel::class];
+    }
+
+    public function toLocalNotification(object $notifiable): LocalNotificationMessage
+    {
+        return LocalNotificationMessage::create()
+            ->id('my-notification')
+            ->title('Hello')
+            ->body('Sent via Laravel Notification channel')
+            ->delay(10)
+            ->sound()
+            ->action('ok', 'OK')
+            ->action('cancel', 'Cancel', destructive: true);
+    }
+}
+
+// Send it
+(new AnonymousNotifiable)->notify(new DebugLocalNotification);
+```
+
+### Notification Debug Panel
+
+Navigate to **Settings > Notification Debug** to access 7 test scenarios that verify the entire notification pipeline on a real device:
+
+| # | Scenario | What it tests |
+|---|----------|---------------|
+| 1 | Warm Start (10s) | Schedule, receive, and tap while app is open |
+| 2 | Cold Start (30s) | Tap detection after app is killed |
+| 3a | Action Buttons — Warm (10s) | 3 action buttons (regular + destructive) while app is open |
+| 3b | Action Buttons — Cold (30s) | Same buttons after app is killed |
+| 3c | Text Input Action (10s) | Reply-style action with text input field |
+| 4 | Update Content (60s) | Updating title/body while preserving timing |
+| 5 | Update Timing (120s > 15s) | Rescheduling to fire sooner |
+| 6 | Schedule + Cancel + GetPending | Instant schedule/cancel/list operations |
+| 7 | Laravel Notification Channel (10s) | Full end-to-end via `$notifiable->notify()` |
+
+All events are logged in real-time at the bottom of the debug panel.
 
 ### Live UI Updates
 
@@ -131,8 +185,9 @@ composer test          # Run test suite (44 tests)
 ```
 app/
   Http/Middleware/    ApplyDeviceTimezone.php
-  Livewire/          Today.php, Settings.php, HabitForm.php
+  Livewire/          Today.php, Settings.php, HabitForm.php, NotificationDebug.php
   Models/            Habit.php, HabitCompletion.php
+  Notifications/     DebugLocalNotification.php (Laravel Notification channel example)
   Services/          HabitNotificationService.php
   Providers/         NativeServiceProvider.php
 bootstrap/
@@ -145,7 +200,7 @@ resources/
   css/app.css        Tailwind @theme + custom animations
   views/
     layouts/         Base layout with bottom nav, safe areas, timezone detection
-    livewire/        Component views (today, settings, habit-form)
+    livewire/        Component views (today, settings, habit-form, notification-debug)
 plan/                Epic documents (development roadmap)
 tests/
   Feature/           HabitFormTest, TodayTest, PageTest

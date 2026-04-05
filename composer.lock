@@ -1278,16 +1278,16 @@
         },
         {
             "name": "ikromjon/nativephp-mobile-local-notifications",
-            "version": "v1.6.0",
+            "version": "v1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Ikromjon1998/nativephp-mobile-local-notifications.git",
-                "reference": "35806a440bee085f466c4e43db0be94926f5d73c"
+                "reference": "3bac29f0a9c1d50c8c6df8372572b8efb418e3f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Ikromjon1998/nativephp-mobile-local-notifications/zipball/35806a440bee085f466c4e43db0be94926f5d73c",
-                "reference": "35806a440bee085f466c4e43db0be94926f5d73c",
+                "url": "https://api.github.com/repos/Ikromjon1998/nativephp-mobile-local-notifications/zipball/3bac29f0a9c1d50c8c6df8372572b8efb418e3f6",
+                "reference": "3bac29f0a9c1d50c8c6df8372572b8efb418e3f6",
                 "shasum": ""
             },
             "require": {
@@ -1334,9 +1334,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Ikromjon1998/nativephp-mobile-local-notifications/issues",
-                "source": "https://github.com/Ikromjon1998/nativephp-mobile-local-notifications/tree/v1.6.0"
+                "source": "https://github.com/Ikromjon1998/nativephp-mobile-local-notifications/tree/v1.7.0"
             },
-            "time": "2026-04-04T20:31:17+00:00"
+            "time": "2026-04-05T00:56:12+00:00"
         },
         {
             "name": "laravel/framework",

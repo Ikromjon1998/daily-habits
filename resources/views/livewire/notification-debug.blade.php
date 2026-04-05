@@ -3,7 +3,7 @@
     <div class="mb-4 section-enter flex items-center justify-between">
         <div>
             <h1 class="text-2xl font-bold">Notification Debug</h1>
-            <p class="text-xs text-gray-500 mt-1">Plugin v1.6.0 — Update + Refactor</p>
+            <p class="text-xs text-gray-500 mt-1">Plugin v1.7.0 — Action Buttons + Notification Channel</p>
         </div>
         <a href="/settings" wire:navigate class="text-xs text-violet-400 font-medium px-3 py-1.5 rounded-lg bg-violet-500/10">
             Back
@@ -32,9 +32,10 @@
         <div class="bg-gray-900/50 border border-gray-800/30 rounded-2xl px-5 py-4 mb-3">
             <p class="text-xs font-semibold text-gray-400 mb-2">How to test</p>
             <p class="text-[11px] text-gray-500 leading-relaxed">
-                Run scenarios in order: start with #6 (instant), then #5 (15s), then #4 (60s).
-                Run #1 while waiting for #4. Save #2 and #3 for last (require killing the app).
-                After each test, check the Event Log below for expected events. Use "Copy Log" to share results.
+                Start with #6 (instant), then #5 (15s), then #1 (10s warm).
+                Then test action buttons: #3a (warm, 10s), #3c (input, 10s), then #3b (cold, 30s).
+                Test #7 to verify Laravel Notification channel integration.
+                Save #2 for last (cold start tap). After each test, check the Event Log below.
             </p>
         </div>
 
@@ -75,22 +76,60 @@
                 </div>
             </button>
 
-            {{-- Scenario 3: Action buttons cold start --}}
+            {{-- Scenario 3a: Action buttons warm start --}}
+            <button wire:click="scheduleActionWarmTest" class="card-press w-full px-5 py-4 active:bg-gray-800/50 transition-colors text-left">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-red-600/20 flex items-center justify-center text-lg">3a</div>
+                    <div class="flex-1">
+                        <p class="text-sm font-semibold text-red-400">Action Buttons — Warm (10s)</p>
+                        <p class="text-xs text-gray-500 mt-0.5">Tests: 3 action buttons (regular + destructive) while app is open.</p>
+                    </div>
+                </div>
+                <div class="mt-2 ml-13 space-y-1">
+                    <p class="text-[11px] text-gray-500">1. Tap this button, keep app open</p>
+                    <p class="text-[11px] text-gray-500">2. Wait 10s for the notification banner</p>
+                    <p class="text-[11px] text-gray-500">3. <span class="text-white">iOS:</span> Long-press the banner to reveal buttons</p>
+                    <p class="text-[11px] text-gray-500">3. <span class="text-white">Android/Samsung:</span> Swipe banner up, pull down shade, then expand the notification (two-finger swipe down or tap the arrow)</p>
+                    <p class="text-[11px] text-gray-500">4. You should see 3 buttons: <span class="text-white">Done</span>, <span class="text-red-400">Skip</span> (red on iOS), <span class="text-white">Snooze</span></p>
+                    <p class="text-[11px] text-gray-500">5. Tap any button</p>
+                    <p class="text-[11px] text-green-700">Pass: ActionPressed shows the correct button name ("done", "skip", or "snooze") in log</p>
+                </div>
+            </button>
+
+            {{-- Scenario 3b: Action buttons cold start --}}
             <button wire:click="scheduleActionTest" class="card-press w-full px-5 py-4 active:bg-gray-800/50 transition-colors text-left">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-red-600/20 flex items-center justify-center text-lg">3</div>
+                    <div class="w-10 h-10 rounded-xl bg-red-600/20 flex items-center justify-center text-lg">3b</div>
                     <div class="flex-1">
-                        <p class="text-sm font-semibold text-red-400">Action Buttons + Cold (30s)</p>
-                        <p class="text-xs text-gray-500 mt-0.5">Tests: action button press after app is killed.</p>
+                        <p class="text-sm font-semibold text-red-400">Action Buttons — Cold (30s)</p>
+                        <p class="text-xs text-gray-500 mt-0.5">Tests: same 3 buttons, but after app is killed.</p>
                     </div>
                 </div>
                 <div class="mt-2 ml-13 space-y-1">
                     <p class="text-[11px] text-gray-500">1. Tap this button</p>
-                    <p class="text-[11px] text-gray-500">2. Kill the app (swipe away from recents)</p>
-                    <p class="text-[11px] text-gray-500">3. Wait 30 seconds for the notification</p>
-                    <p class="text-[11px] text-gray-500">4. Pull down the notification to expand it</p>
-                    <p class="text-[11px] text-gray-500">5. Press "Confirm" or "Dismiss" action button</p>
-                    <p class="text-[11px] text-green-700">Pass: NotificationActionPressed with correct actionId ("confirm" or "dismiss") in log</p>
+                    <p class="text-[11px] text-gray-500">2. Kill the app (swipe away)</p>
+                    <p class="text-[11px] text-gray-500">3. Wait 30s, then open notification shade and expand the notification</p>
+                    <p class="text-[11px] text-gray-500">4. Pick any action: <span class="text-white">Done</span>, <span class="text-red-400">Skip</span>, or <span class="text-white">Snooze</span></p>
+                    <p class="text-[11px] text-green-700">Pass: App relaunches, ActionPressed appears in log with correct actionId</p>
+                </div>
+            </button>
+
+            {{-- Scenario 3c: Text input action --}}
+            <button wire:click="scheduleActionInputTest" class="card-press w-full px-5 py-4 active:bg-gray-800/50 transition-colors text-left">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-pink-600/20 flex items-center justify-center text-lg">3c</div>
+                    <div class="flex-1">
+                        <p class="text-sm font-semibold text-pink-400">Text Input Action (10s)</p>
+                        <p class="text-xs text-gray-500 mt-0.5">Tests: reply-style action button with text input field.</p>
+                    </div>
+                </div>
+                <div class="mt-2 ml-13 space-y-1">
+                    <p class="text-[11px] text-gray-500">1. Tap this button, keep app open</p>
+                    <p class="text-[11px] text-gray-500">2. Wait 10s, open notification shade and expand the notification</p>
+                    <p class="text-[11px] text-gray-500">3. Tap "Reply" — a text field should appear</p>
+                    <p class="text-[11px] text-gray-500">4. Type something and send</p>
+                    <p class="text-[11px] text-green-700">Pass: ActionPressed shows actionId "reply" and your typed text in "Input:" field</p>
+                    <p class="text-[11px] text-gray-500">5. Or tap <span class="text-red-400">Dismiss</span> (red) to test destructive style</p>
                 </div>
             </button>
 
@@ -144,6 +183,25 @@
                     <p class="text-[11px] text-gray-500">2. Check the log immediately for 4 entries</p>
                     <p class="text-[11px] text-green-700">Pass: First GetPending shows count: 2 with both notifications. Second GetPending shows count: 0 after cancel.</p>
                     <p class="text-[11px] text-red-700">Fail: If GetPending count doesn't match or cancel doesn't remove entries.</p>
+                </div>
+            </button>
+
+            {{-- Scenario 7: Laravel Notification Channel --}}
+            <button wire:click="scheduleChannelTest" class="card-press w-full px-5 py-4 active:bg-gray-800/50 transition-colors text-left">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-600/20 flex items-center justify-center text-lg">7</div>
+                    <div class="flex-1">
+                        <p class="text-sm font-semibold text-indigo-400">Laravel Notification Channel (10s)</p>
+                        <p class="text-xs text-gray-500 mt-0.5">Tests: scheduling via Laravel's Notification system (via() + toLocalNotification()).</p>
+                    </div>
+                </div>
+                <div class="mt-2 ml-13 space-y-1">
+                    <p class="text-[11px] text-gray-500">1. Tap this button, keep app open</p>
+                    <p class="text-[11px] text-gray-500">2. Wait 10s for the notification</p>
+                    <p class="text-[11px] text-gray-500">3. Expand notification to see 2 buttons: <span class="text-white">OK</span> and <span class="text-red-400">Cancel</span></p>
+                    <p class="text-[11px] text-gray-500">4. Tap the notification or an action button</p>
+                    <p class="text-[11px] text-green-700">Pass: NotificationScheduled + NotificationReceived appear (same as direct scheduling). Action buttons work.</p>
+                    <p class="text-[11px] text-indigo-400">This proves the full Laravel Notification channel integration works end-to-end.</p>
                 </div>
             </button>
         </div>

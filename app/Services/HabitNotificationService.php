@@ -148,6 +148,7 @@ class HabitNotificationService
     {
         return [
             new NotificationAction(id: 'done', title: 'Done'),
+            new NotificationAction(id: 'skip', title: 'Skip', destructive: true),
             new NotificationAction(id: 'snooze', title: 'Snooze'),
         ];
     }

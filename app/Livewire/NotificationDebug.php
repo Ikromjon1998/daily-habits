@@ -9,7 +9,9 @@ use Ikromjon\LocalNotifications\Events\NotificationTapped;
 use Ikromjon\LocalNotifications\Events\NotificationUpdated;
 use Ikromjon\LocalNotifications\Events\PermissionGranted;
 use Ikromjon\LocalNotifications\Facades\LocalNotifications;
+use App\Notifications\DebugLocalNotification;
 use Illuminate\Contracts\View\View;
+use Illuminate\Notifications\AnonymousNotifiable;
 use Livewire\Component;
 use Native\Mobile\Attributes\OnNative;
 
@@ -70,18 +72,60 @@ class NotificationDebug extends Component
     public function scheduleActionTest(): void
     {
         LocalNotifications::schedule([
-            'id' => 'debug-action',
-            'title' => 'Action Button Test',
-            'body' => 'Kill app, then press an action button',
+            'id' => 'debug-action-cold',
+            'title' => 'Action Buttons (Cold)',
+            'body' => 'Kill app, then long-press and pick an action',
             'delay' => 30,
             'sound' => true,
             'data' => ['scenario' => 'action-cold', 'ts' => now()->timestamp],
             'actions' => [
-                ['id' => 'confirm', 'title' => 'Confirm'],
+                ['id' => 'done', 'title' => 'Done'],
+                ['id' => 'skip', 'title' => 'Skip', 'destructive' => true],
+                ['id' => 'snooze', 'title' => 'Snooze'],
+            ],
+        ]);
+        $this->log('Scheduled', 'debug-action-cold — fires in 30s with 3 actions: Done, Skip (destructive/red), Snooze');
+    }
+
+    /**
+     * Scenario 3b: Notification with action buttons — warm start (10s).
+     */
+    public function scheduleActionWarmTest(): void
+    {
+        LocalNotifications::schedule([
+            'id' => 'debug-action-warm',
+            'title' => 'Action Buttons (Warm)',
+            'body' => 'Keep app open, long-press and pick an action',
+            'delay' => 10,
+            'sound' => true,
+            'data' => ['scenario' => 'action-warm', 'ts' => now()->timestamp],
+            'actions' => [
+                ['id' => 'done', 'title' => 'Done'],
+                ['id' => 'skip', 'title' => 'Skip', 'destructive' => true],
+                ['id' => 'snooze', 'title' => 'Snooze'],
+            ],
+        ]);
+        $this->log('Scheduled', 'debug-action-warm — fires in 10s with 3 actions: Done, Skip (destructive/red), Snooze');
+    }
+
+    /**
+     * Scenario 3c: Notification with text input action.
+     */
+    public function scheduleActionInputTest(): void
+    {
+        LocalNotifications::schedule([
+            'id' => 'debug-action-input',
+            'title' => 'Reply Action Test',
+            'body' => 'Long-press and try the Reply button with text input',
+            'delay' => 10,
+            'sound' => true,
+            'data' => ['scenario' => 'action-input', 'ts' => now()->timestamp],
+            'actions' => [
+                ['id' => 'reply', 'title' => 'Reply', 'input' => true],
                 ['id' => 'dismiss', 'title' => 'Dismiss', 'destructive' => true],
             ],
         ]);
-        $this->log('Scheduled', 'debug-action — fires in 30s with action buttons');
+        $this->log('Scheduled', 'debug-action-input — fires in 10s with Reply (text input) + Dismiss (destructive)');
     }
 
     /**
@@ -158,6 +202,16 @@ class NotificationDebug extends Component
         $this->log('GetPending after cancel', json_encode($afterCancel, JSON_THROW_ON_ERROR));
     }
 
+    /**
+     * Scenario 7: Laravel Notification channel (10s).
+     * Uses LocalNotificationChannel + LocalNotificationMessage via $notifiable->notify().
+     */
+    public function scheduleChannelTest(): void
+    {
+        (new AnonymousNotifiable)->notify(new DebugLocalNotification);
+        $this->log('Scheduled (Channel)', 'debug-channel — fires in 10s via Laravel Notification channel with 2 actions: OK, Cancel');
+    }
+
     public function clearLog(): void
     {
         $this->eventLog = [];
@@ -184,7 +238,18 @@ class NotificationDebug extends Component
     #[OnNative(NotificationActionPressed::class)]
     public function onActionPressed(mixed ...$data): void
     {
-        $this->log('NotificationActionPressed', json_encode($data, JSON_THROW_ON_ERROR));
+        // Data arrives as positional args: [notificationId, actionId, inputText?]
+        $notificationId = $data[0] ?? '?';
+        $actionId = $data[1] ?? '?';
+        $inputText = $data[2] ?? null;
+
+        $summary = "Button: \"{$actionId}\" on notification \"{$notificationId}\"";
+        if ($inputText !== null) {
+            $summary .= " | Input: \"{$inputText}\"";
+        }
+
+        $this->log('ActionPressed', $summary);
+        $this->log('ActionPressed (raw)', json_encode($data, JSON_THROW_ON_ERROR));
     }
 
     #[OnNative(NotificationUpdated::class)]

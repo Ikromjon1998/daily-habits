@@ -57,6 +57,8 @@ class Today extends Component
             if (! $habit->isCompletedToday()) {
                 $habit->toggleToday();
             }
+        } elseif ($actionId === 'skip') {
+            logger()->info('Habit skipped via notification', ['habit_id' => $habit->id]);
         } elseif ($actionId === 'snooze') {
             app(HabitNotificationService::class)->snooze($habit);
         }

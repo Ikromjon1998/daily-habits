@@ -95,8 +95,9 @@ When in doubt, follow the patterns in existing code. Check sibling files before 
 ```
 app/
   Http/Middleware/    ApplyDeviceTimezone.php
-  Livewire/          Today.php, Settings.php, HabitForm.php
+  Livewire/          Today.php, Settings.php, HabitForm.php, NotificationDebug.php
   Models/            Habit.php, HabitCompletion.php
+  Notifications/     DebugLocalNotification.php (Laravel Notification channel example)
   Services/          HabitNotificationService.php
   Providers/         NativeServiceProvider.php
 bootstrap/
@@ -109,11 +110,22 @@ resources/
   css/app.css        Tailwind @theme + custom animations
   views/
     layouts/         Base layout with bottom nav, safe areas, timezone detection
-    livewire/        Component views (today, settings, habit-form)
+    livewire/        Component views (today, settings, habit-form, notification-debug)
 plan/                Epic documents (development roadmap)
 tests/
   Feature/           HabitFormTest, TodayTest, PageTest
 ```
+
+## Testing Notifications on Device
+
+Notifications require a native build (`php artisan native:run android` or `ios`). They do not work with `php artisan native:jump`.
+
+1. Build and deploy to your device
+2. Navigate to **Settings > Notification Debug**
+3. Run the test scenarios (1–7) — each one logs events in real-time
+4. Check the Event Log at the bottom for pass/fail results
+
+Scenario 7 tests the Laravel Notification channel integration end-to-end. See `app/Notifications/DebugLocalNotification.php` for the implementation and `app/Livewire/NotificationDebug.php` for all test scenarios.
 
 ## Reporting Issues
 

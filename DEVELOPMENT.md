@@ -26,8 +26,9 @@ composer run dev
 
 ```
 app/
-  Livewire/         # Page components (Today, Settings, HabitForm)
+  Livewire/         # Page components (Today, Settings, HabitForm, NotificationDebug)
   Models/           # Habit, HabitCompletion
+  Notifications/    # DebugLocalNotification (Laravel Notification channel example)
   Providers/
     NativeServiceProvider.php  # NativePHP plugin registration
 database/
@@ -71,6 +72,43 @@ LocalNotifications::getPending();
 LocalNotifications::requestPermission();
 LocalNotifications::checkPermission();
 ```
+
+### Laravel Notification Channel
+
+Instead of calling `LocalNotifications::schedule()` directly, you can use Laravel's notification system:
+
+```php
+use Ikromjon\LocalNotifications\Notifications\HasLocalNotification;
+use Ikromjon\LocalNotifications\Notifications\LocalNotificationChannel;
+use Ikromjon\LocalNotifications\Notifications\LocalNotificationMessage;
+use Illuminate\Notifications\Notification;
+
+class MyNotification extends Notification implements HasLocalNotification
+{
+    public function via(object $notifiable): array
+    {
+        return [LocalNotificationChannel::class];
+    }
+
+    public function toLocalNotification(object $notifiable): LocalNotificationMessage
+    {
+        return LocalNotificationMessage::create()
+            ->id('my-id')
+            ->title('Title')
+            ->body('Body text')
+            ->delay(10)
+            ->sound()
+            ->action('done', 'Done')
+            ->action('skip', 'Skip', destructive: true)
+            ->data(['key' => 'value']);
+    }
+}
+
+// Send it (no user model needed)
+(new \Illuminate\Notifications\AnonymousNotifiable)->notify(new MyNotification);
+```
+
+See `app/Notifications/DebugLocalNotification.php` for a working example, tested via scenario 7 in the Notification Debug panel.
 
 ### Events (use with `#[OnNative(EventClass::class)]`)
 

@@ -35,12 +35,23 @@
                  window.Livewire.on('native:Ikromjon\\LocalNotifications\\Events\\NotificationTapped', (data) => {
                      add('JS GOT NotificationTapped: ' + JSON.stringify(data));
                  });
+                 window.Livewire.on('native:Ikromjon\\LocalNotifications\\Events\\NotificationActionPressed', (data) => {
+                     const d = Array.isArray(data) ? data[0] : data;
+                     const btn = d?.actionId || '?';
+                     const input = d?.inputText ? ' input=' + d.inputText : '';
+                     add('JS GOT ActionPressed: button="' + btn + '"' + input + ' raw=' + JSON.stringify(data));
+                 });
              }
 
              document.addEventListener('livewire:init', () => {
                  if (window.Livewire && window.Livewire.on) {
                      window.Livewire.on('native:Ikromjon\\LocalNotifications\\Events\\NotificationTapped', (data) => {
                          add('JS GOT NotificationTapped (after init): ' + JSON.stringify(data));
+                     });
+                     window.Livewire.on('native:Ikromjon\\LocalNotifications\\Events\\NotificationActionPressed', (data) => {
+                         const d = Array.isArray(data) ? data[0] : data;
+                         const btn = d?.actionId || '?';
+                         add('JS GOT ActionPressed (after init): button="' + btn + '" raw=' + JSON.stringify(data));
                      });
                  }
              });
