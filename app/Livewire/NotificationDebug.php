@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Notifications\DebugLocalNotification;
 use Ikromjon\LocalNotifications\Events\NotificationActionPressed;
 use Ikromjon\LocalNotifications\Events\NotificationReceived;
 use Ikromjon\LocalNotifications\Events\NotificationScheduled;
@@ -9,7 +10,6 @@ use Ikromjon\LocalNotifications\Events\NotificationTapped;
 use Ikromjon\LocalNotifications\Events\NotificationUpdated;
 use Ikromjon\LocalNotifications\Events\PermissionGranted;
 use Ikromjon\LocalNotifications\Facades\LocalNotifications;
-use App\Notifications\DebugLocalNotification;
 use Illuminate\Contracts\View\View;
 use Illuminate\Notifications\AnonymousNotifiable;
 use Livewire\Component;
@@ -81,10 +81,10 @@ class NotificationDebug extends Component
             'actions' => [
                 ['id' => 'done', 'title' => 'Done'],
                 ['id' => 'skip', 'title' => 'Skip', 'destructive' => true],
-                ['id' => 'snooze', 'title' => 'Snooze'],
+                ['id' => 'snooze', 'title' => 'Snooze (5m)', 'snooze' => 300],
             ],
         ]);
-        $this->log('Scheduled', 'debug-action-cold — fires in 30s with 3 actions: Done, Skip (destructive/red), Snooze');
+        $this->log('Scheduled', 'debug-action-cold — fires in 30s with 3 actions: Done, Skip, Snooze (5min native)');
     }
 
     /**
@@ -102,10 +102,10 @@ class NotificationDebug extends Component
             'actions' => [
                 ['id' => 'done', 'title' => 'Done'],
                 ['id' => 'skip', 'title' => 'Skip', 'destructive' => true],
-                ['id' => 'snooze', 'title' => 'Snooze'],
+                ['id' => 'snooze', 'title' => 'Snooze (5m)', 'snooze' => 300],
             ],
         ]);
-        $this->log('Scheduled', 'debug-action-warm — fires in 10s with 3 actions: Done, Skip (destructive/red), Snooze');
+        $this->log('Scheduled', 'debug-action-warm — fires in 10s with 3 actions: Done, Skip, Snooze (5min native)');
     }
 
     /**
@@ -238,7 +238,7 @@ class NotificationDebug extends Component
     #[OnNative(NotificationActionPressed::class)]
     public function onActionPressed(mixed ...$data): void
     {
-        // Data arrives as positional args: [notificationId, actionId, inputText?]
+        // Data arrives as positional args: [notificationId, actionId, inputText?, data?, snoozed?, snoozeSeconds?]
         $notificationId = $data[0] ?? '?';
         $actionId = $data[1] ?? '?';
         $inputText = $data[2] ?? null;

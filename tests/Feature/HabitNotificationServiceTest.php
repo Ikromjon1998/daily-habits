@@ -83,11 +83,13 @@ class HabitNotificationServiceTest extends TestCase
         LocalNotifications::shouldReceive('cancel')->once();
         LocalNotifications::shouldReceive('schedule')->once()
             ->withArgs(function (NotificationOptions $options): bool {
-                return count($options->actions) === 2
+                return count($options->actions) === 3
                     && $options->actions[0] instanceof NotificationAction
                     && $options->actions[0]->id === 'done'
                     && $options->actions[1] instanceof NotificationAction
-                    && $options->actions[1]->id === 'snooze';
+                    && $options->actions[1]->id === 'skip'
+                    && $options->actions[2] instanceof NotificationAction
+                    && $options->actions[2]->id === 'snooze';
             });
 
         $this->service->schedule($habit);
