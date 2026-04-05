@@ -14,53 +14,55 @@
         </div>
     @endif
 
-    {{-- Debug Panel --}}
-    <div class="mb-4 px-4 py-3 bg-gray-900 border border-gray-800/50 rounded-xl text-xs font-mono"
+    {{-- Compact Debug Bar --}}
+    <div class="mb-3 section-enter"
          x-data="{
              logs: [],
              add(msg) {
                  const t = new Date().toLocaleTimeString('en-US', {hour12:false});
                  this.logs.unshift(t + ' ' + msg);
-                 if (this.logs.length > 20) this.logs.pop();
              }
          }"
          x-init="
-             add('page loaded, readyState=' + document.readyState);
-             add('Livewire=' + (typeof window.Livewire !== 'undefined' ? 'yes' : 'no'));
+             add('ready');
 
-             document.addEventListener('livewire:init', () => add('livewire:init fired'));
-             document.addEventListener('livewire:navigated', () => add('livewire:navigated fired'));
+             document.addEventListener('livewire:navigated', () => add('navigated'));
 
              if (window.Livewire && window.Livewire.on) {
                  window.Livewire.on('native:Ikromjon\\LocalNotifications\\Events\\NotificationTapped', (data) => {
-                     add('JS GOT NotificationTapped: ' + JSON.stringify(data));
+                     add('Tapped: ' + JSON.stringify(data));
                  });
                  window.Livewire.on('native:Ikromjon\\LocalNotifications\\Events\\NotificationActionPressed', (data) => {
-                     const d = Array.isArray(data) ? data[0] : data;
-                     const btn = d?.actionId || '?';
-                     const input = d?.inputText ? ' input=' + d.inputText : '';
-                     add('JS GOT ActionPressed: button="' + btn + '"' + input + ' raw=' + JSON.stringify(data));
+                     add('Action: ' + JSON.stringify(data));
+                 });
+                 window.Livewire.on('native:Ikromjon\\LocalNotifications\\Events\\NotificationReceived', (data) => {
+                     add('Received: ' + JSON.stringify(data));
                  });
              }
-
-             document.addEventListener('livewire:init', () => {
-                 if (window.Livewire && window.Livewire.on) {
-                     window.Livewire.on('native:Ikromjon\\LocalNotifications\\Events\\NotificationTapped', (data) => {
-                         add('JS GOT NotificationTapped (after init): ' + JSON.stringify(data));
-                     });
-                     window.Livewire.on('native:Ikromjon\\LocalNotifications\\Events\\NotificationActionPressed', (data) => {
-                         const d = Array.isArray(data) ? data[0] : data;
-                         const btn = d?.actionId || '?';
-                         add('JS GOT ActionPressed (after init): button="' + btn + '" raw=' + JSON.stringify(data));
-                     });
-                 }
-             });
          ">
-        <p class="text-gray-500 font-semibold mb-1">Debug Log</p>
-        <template x-for="(log, i) in logs" :key="i">
-            <p class="text-gray-400 leading-relaxed" x-text="log"></p>
-        </template>
-        <p x-show="logs.length === 0" class="text-gray-600">Waiting for events...</p>
+        <div class="bg-gray-900/60 border border-gray-800/30 rounded-xl px-3 py-2">
+            <div class="flex items-center justify-between mb-1">
+                <span class="text-[10px] font-semibold text-gray-600 uppercase tracking-wider">Debug</span>
+                <div class="flex items-center gap-2">
+                    <button
+                        x-on:click="
+                            const visible = logs.slice(0, 3).map(l => l).join('\n');
+                            navigator.clipboard.writeText(visible);
+                        "
+                        class="text-[10px] text-cyan-600 active:text-cyan-400">Visible</button>
+                    <button
+                        x-on:click="
+                            navigator.clipboard.writeText(logs.join('\n'));
+                        "
+                        class="text-[10px] text-cyan-600 active:text-cyan-400">All</button>
+                </div>
+            </div>
+            <template x-for="(log, i) in logs.slice(0, 3)" :key="i">
+                <p class="text-[10px] font-mono text-gray-500 truncate leading-relaxed" x-text="log"></p>
+            </template>
+            <p x-show="logs.length > 3" class="text-[10px] font-mono text-gray-700" x-text="'+ ' + (logs.length - 3) + ' more'"></p>
+            <p x-show="logs.length === 0" class="text-[10px] font-mono text-gray-700">No events</p>
+        </div>
     </div>
 
     {{-- Header --}}
