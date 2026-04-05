@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notification;
 
 class DebugLocalNotification extends Notification implements HasLocalNotification
 {
+    /** @return array<int, class-string> */
     public function via(object $notifiable): array
     {
         return [LocalNotificationChannel::class];
