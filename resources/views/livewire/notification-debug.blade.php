@@ -3,7 +3,7 @@
     <div class="mb-4 section-enter flex items-center justify-between">
         <div>
             <h1 class="text-2xl font-bold">Notification Debug</h1>
-            <p class="text-xs text-gray-500 mt-1">Plugin v1.7.0 — Action Buttons + Notification Channel</p>
+            <p class="text-xs text-gray-500 mt-1">Plugin v1.8.0 — Native Snooze + Cold-Start Action Events</p>
         </div>
         <a href="/settings" wire:navigate class="text-xs text-violet-400 font-medium px-3 py-1.5 rounded-lg bg-violet-500/10">
             Back
@@ -82,7 +82,7 @@
                     <div class="w-10 h-10 rounded-xl bg-red-600/20 flex items-center justify-center text-lg">3a</div>
                     <div class="flex-1">
                         <p class="text-sm font-semibold text-red-400">Action Buttons — Warm (10s)</p>
-                        <p class="text-xs text-gray-500 mt-0.5">Tests: 3 action buttons (regular + destructive) while app is open.</p>
+                        <p class="text-xs text-gray-500 mt-0.5">Tests: 3 action buttons (regular + destructive + snooze 5min) while app is open.</p>
                     </div>
                 </div>
                 <div class="mt-2 ml-13 space-y-1">
@@ -90,9 +90,9 @@
                     <p class="text-[11px] text-gray-500">2. Wait 10s for the notification banner</p>
                     <p class="text-[11px] text-gray-500">3. <span class="text-white">iOS:</span> Long-press the banner to reveal buttons</p>
                     <p class="text-[11px] text-gray-500">3. <span class="text-white">Android/Samsung:</span> Swipe banner up, pull down shade, then expand the notification (two-finger swipe down or tap the arrow)</p>
-                    <p class="text-[11px] text-gray-500">4. You should see 3 buttons: <span class="text-white">Done</span>, <span class="text-red-400">Skip</span> (red on iOS), <span class="text-white">Snooze</span></p>
-                    <p class="text-[11px] text-gray-500">5. Tap any button</p>
-                    <p class="text-[11px] text-green-700">Pass: ActionPressed shows the correct button name ("done", "skip", or "snooze") in log</p>
+                    <p class="text-[11px] text-gray-500">4. You should see 3 buttons: <span class="text-white">Done</span>, <span class="text-red-400">Skip</span> (red on iOS), <span class="text-white">Snooze (5m)</span></p>
+                    <p class="text-[11px] text-gray-500">5. Tap any button — <span class="text-amber-400">Snooze reschedules natively in 5 minutes</span></p>
+                    <p class="text-[11px] text-green-700">Pass: ActionPressed shows actionId + snoozed:true/snoozeSeconds:300 for snooze button</p>
                 </div>
             </button>
 
@@ -102,15 +102,17 @@
                     <div class="w-10 h-10 rounded-xl bg-red-600/20 flex items-center justify-center text-lg">3b</div>
                     <div class="flex-1">
                         <p class="text-sm font-semibold text-red-400">Action Buttons — Cold (30s)</p>
-                        <p class="text-xs text-gray-500 mt-0.5">Tests: same 3 buttons, but after app is killed.</p>
+                        <p class="text-xs text-gray-500 mt-0.5">Tests: same 3 buttons after app is killed. Snooze works natively even when app is dead.</p>
                     </div>
                 </div>
                 <div class="mt-2 ml-13 space-y-1">
                     <p class="text-[11px] text-gray-500">1. Tap this button</p>
                     <p class="text-[11px] text-gray-500">2. Kill the app (swipe away)</p>
                     <p class="text-[11px] text-gray-500">3. Wait 30s, then open notification shade and expand the notification</p>
-                    <p class="text-[11px] text-gray-500">4. Pick any action: <span class="text-white">Done</span>, <span class="text-red-400">Skip</span>, or <span class="text-white">Snooze</span></p>
-                    <p class="text-[11px] text-green-700">Pass: App relaunches, ActionPressed appears in log with correct actionId</p>
+                    <p class="text-[11px] text-gray-500">4. Pick any action: <span class="text-white">Done</span>, <span class="text-red-400">Skip</span>, or <span class="text-white">Snooze (5m)</span></p>
+                    <p class="text-[11px] text-amber-500">Snooze: notification reappears in 5 min without opening the app</p>
+                    <p class="text-[11px] text-gray-500">5. Open app manually — ActionPressed event should appear in debug bar/log</p>
+                    <p class="text-[11px] text-green-700">Pass: ActionPressed appears in log with actionId + snoozed flag for snooze button</p>
                 </div>
             </button>
 

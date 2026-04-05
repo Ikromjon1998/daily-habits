@@ -24,6 +24,7 @@ class DebugLocalNotification extends Notification implements HasLocalNotificatio
             ->sound()
             ->action('ok', 'OK')
             ->action('cancel', 'Cancel', destructive: true)
+            ->action('snooze', 'Snooze (5m)', snooze: 300)
             ->data(['scenario' => 'laravel-channel', 'ts' => now()->timestamp]);
     }
 }
