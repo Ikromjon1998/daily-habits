@@ -8,7 +8,9 @@
 
 A mobile daily habits tracker built with Laravel, Livewire, and NativePHP Mobile. Runs natively on Android and iOS — no server required, everything works offline.
 
-This project is open source and serves as a real-world example of building a native mobile app with the Laravel/PHP ecosystem. It is also the primary test app for NativePHP Mobile notification plugins — cold-start tap events, warm-start detection, action buttons, and Livewire 4 SPA compatibility are all tested here on real devices.
+This project is open source and serves as a real-world example of building a native mobile app with the Laravel/PHP ecosystem. It is also the primary test app for the [`nativephp-mobile-local-notifications`](https://github.com/Ikromjon1998/nativephp-mobile-local-notifications) plugin — cold-start tap events, warm-start detection, action buttons, native snooze rescheduling, and Livewire 4 SPA compatibility are all tested here on real devices.
+
+If you're interested in trying out the notification plugin, this app is a great place to start. Contributions and testing feedback are very welcome — see [Contributing](#contributing).
 
 ## Screenshots
 
@@ -38,7 +40,7 @@ This project is open source and serves as a real-world example of building a nat
 
 ## Tech Stack
 
-- **PHP 8.4** / **Laravel 12** / **Livewire 4**
+- **PHP 8.3+** / **Laravel 12** / **Livewire 4**
 - **NativePHP Mobile v3** — native Android & iOS builds from a single Laravel codebase
 - **Tailwind CSS 4** — dark theme with safe area inset support
 - **Alpine.js** — lightweight client-side interactivity (bundled with Livewire)
@@ -113,7 +115,8 @@ class DebugLocalNotification extends Notification implements HasLocalNotificatio
             ->delay(10)
             ->sound()
             ->action('ok', 'OK')
-            ->action('cancel', 'Cancel', destructive: true);
+            ->action('cancel', 'Cancel', destructive: true)
+            ->action('snooze', 'Snooze (5m)', snooze: 300);
     }
 }
 
@@ -123,14 +126,14 @@ class DebugLocalNotification extends Notification implements HasLocalNotificatio
 
 ### Notification Debug Panel
 
-Navigate to **Settings > Notification Debug** to access 7 test scenarios that verify the entire notification pipeline on a real device:
+Navigate to **Settings > Notification Debug** to access 9 test scenarios that verify the entire notification pipeline on a real device:
 
 | # | Scenario | What it tests |
 |---|----------|---------------|
 | 1 | Warm Start (10s) | Schedule, receive, and tap while app is open |
 | 2 | Cold Start (30s) | Tap detection after app is killed |
-| 3a | Action Buttons — Warm (10s) | 3 action buttons (regular + destructive) while app is open |
-| 3b | Action Buttons — Cold (30s) | Same buttons after app is killed |
+| 3a | Action Buttons — Warm (10s) | 3 action buttons (regular + destructive + native snooze) while app is open |
+| 3b | Action Buttons — Cold (30s) | Same buttons after app is killed — snooze works natively even when app is dead |
 | 3c | Text Input Action (10s) | Reply-style action with text input field |
 | 4 | Update Content (60s) | Updating title/body while preserving timing |
 | 5 | Update Timing (120s > 15s) | Rescheduling to fire sooner |
@@ -180,7 +183,7 @@ composer run dev
 composer lint          # Format with Pint
 composer analyse       # PHPStan level 8
 composer rector:check  # Rector dry-run
-composer test          # Run test suite (44 tests)
+composer test          # Run test suite (57 tests)
 ```
 
 ## Project Structure
@@ -206,7 +209,8 @@ resources/
     livewire/        Component views (today, settings, habit-form, notification-debug)
 plan/                Epic documents (development roadmap)
 tests/
-  Feature/           HabitFormTest, TodayTest, PageTest
+  Feature/           HabitFormTest, TodayTest, PageTest, HabitNotificationServiceTest
+  Unit/              HabitTest
 ```
 
 ## Requirements
@@ -219,6 +223,8 @@ tests/
 ## Contributing
 
 Contributions are welcome! Whether it's a bug fix, new feature, or improvement — feel free to open an issue or submit a pull request. Please read [CONTRIBUTING.md](CONTRIBUTING.md) before getting started.
+
+This project also serves as the primary test app for the [`nativephp-mobile-local-notifications`](https://github.com/Ikromjon1998/nativephp-mobile-local-notifications) plugin. If you have an Android or iOS device and want to help test notification features (action buttons, snooze, cold-start events, etc.), your feedback is especially valuable.
 
 If you'd like to use this project as a starting point for your own app, feel free to fork it.
 

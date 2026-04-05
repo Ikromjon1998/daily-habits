@@ -7,14 +7,15 @@ All notable changes to Daily Habits are documented in this file.
 ### Added
 
 - **Laravel Notification channel integration** — Schedule notifications via Laravel's standard `$notifiable->notify()` pattern using `LocalNotificationChannel` and `LocalNotificationMessage`.
-- **`DebugLocalNotification`** — Working example notification class in `app/Notifications/` demonstrating the channel integration.
-- **Action buttons on habit notifications** — Done, Skip (destructive), and Snooze buttons on all habit reminders.
-- **Notification Debug panel** — 7 test scenarios covering warm/cold start, action buttons (regular, destructive, text input), content/timing updates, schedule/cancel operations, and Laravel Notification channel.
+- **`DebugLocalNotification`** — Working example notification class in `app/Notifications/` demonstrating the channel integration with snooze action.
+- **Action buttons on habit notifications** — Done, Skip (destructive), and Snooze (native 5-minute reschedule) buttons on all habit reminders.
+- **Native snooze rescheduling** — Snooze action reschedules the notification natively via AlarmManager (Android) / UNTimeIntervalNotificationTrigger (iOS), works even when the app is killed.
+- **Notification Debug panel** — 9 test scenarios covering warm/cold start, action buttons (regular, destructive, native snooze, text input), content/timing updates, schedule/cancel operations, and Laravel Notification channel.
 - **Real-time event logging** — All notification events (Scheduled, Received, Tapped, ActionPressed, Updated) logged with timestamps in the debug panel.
 
 ### Changed
 
-- Upgraded `ikromjon/nativephp-mobile-local-notifications` from `^1.6` to `^1.7`.
+- Upgraded `ikromjon/nativephp-mobile-local-notifications` from `^1.6` to `^1.8.1`.
 - Fixed `onActionPressed` handler to parse positional event data correctly (`[notificationId, actionId]` instead of associative array).
 
 ## [1.3.0] - 2026-03-11

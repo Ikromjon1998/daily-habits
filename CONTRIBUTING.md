@@ -113,7 +113,8 @@ resources/
     livewire/        Component views (today, settings, habit-form, notification-debug)
 plan/                Epic documents (development roadmap)
 tests/
-  Feature/           HabitFormTest, TodayTest, PageTest
+  Feature/           HabitFormTest, TodayTest, PageTest, HabitNotificationServiceTest
+  Unit/              HabitTest
 ```
 
 ## Testing Notifications on Device
@@ -122,7 +123,7 @@ Notifications require a native build (`php artisan native:run android` or `ios`)
 
 1. Build and deploy to your device
 2. Navigate to **Settings > Notification Debug**
-3. Run the test scenarios (1–7) — each one logs events in real-time
+3. Run all 9 test scenarios — each one logs events in real-time
 4. Check the Event Log at the bottom for pass/fail results
 
 Scenario 7 tests the Laravel Notification channel integration end-to-end. See `app/Notifications/DebugLocalNotification.php` for the implementation and `app/Livewire/NotificationDebug.php` for all test scenarios.
