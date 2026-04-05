@@ -1,7 +1,10 @@
 # Daily Habits
 
-[![CI](https://github.com/Ikromjon1998/daily-habits/actions/workflows/ci.yml/badge.svg)](https://github.com/Ikromjon1998/daily-habits/actions/workflows/ci.yml)
-[![License](https://img.shields.io/github/license/Ikromjon1998/daily-habits)](LICENSE)
+[![CI](https://github.com/Ikromjon1998/daily-habits/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Ikromjon1998/daily-habits/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![PHP](https://img.shields.io/badge/PHP-8.3%2B-777BB4?logo=php&logoColor=white)](https://php.net)
+[![Release](https://img.shields.io/github/v/release/Ikromjon1998/daily-habits)](https://github.com/Ikromjon1998/daily-habits/releases)
+[![Notification Plugin](https://img.shields.io/badge/local--notifications-v1.8.1-ff6f00)](https://github.com/Ikromjon1998/nativephp-mobile-local-notifications)
 
 A mobile daily habits tracker built with Laravel, Livewire, and NativePHP Mobile. Runs natively on Android and iOS — no server required, everything works offline.
 
@@ -40,7 +43,7 @@ This project is open source and serves as a real-world example of building a nat
 - **Tailwind CSS 4** — dark theme with safe area inset support
 - **Alpine.js** — lightweight client-side interactivity (bundled with Livewire)
 - **SQLite** — local on-device database
-- [`ikromjon/nativephp-mobile-local-notifications`](https://github.com/Ikromjon1998/nativephp-mobile-local-notifications) v1.7.0 — local notification scheduling with repeating intervals, action buttons, cold-start tap events, rich content, and Laravel Notification channel integration
+- [`ikromjon/nativephp-mobile-local-notifications`](https://github.com/Ikromjon1998/nativephp-mobile-local-notifications) v1.8.1 — local notification scheduling with repeating intervals, action buttons, native snooze rescheduling, cold-start event delivery, rich content, and Laravel Notification channel integration
 
 ## How It Works
 
