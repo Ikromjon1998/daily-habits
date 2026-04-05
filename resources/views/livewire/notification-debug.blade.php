@@ -3,7 +3,7 @@
     <div class="mb-4 section-enter flex items-center justify-between">
         <div>
             <h1 class="text-2xl font-bold">Notification Debug</h1>
-            <p class="text-xs text-gray-500 mt-1">Plugin v1.8.0 — Native Snooze + Cold-Start Action Events</p>
+            <p class="text-xs text-gray-500 mt-1">Plugin v1.9.0 — Custom Notification Sounds</p>
         </div>
         <a href="/settings" wire:navigate class="text-xs text-violet-400 font-medium px-3 py-1.5 rounded-lg bg-violet-500/10">
             Back
@@ -35,6 +35,7 @@
                 Start with #6 (instant), then #5 (15s), then #1 (10s warm).
                 Then test action buttons: #3a (warm, 10s), #3c (input, 10s), then #3b (cold, 30s).
                 Test #7 to verify Laravel Notification channel integration.
+                Test #8a and #8b for custom notification sounds.
                 Save #2 for last (cold start tap). After each test, check the Event Log below.
             </p>
         </div>
@@ -204,6 +205,44 @@
                     <p class="text-[11px] text-gray-500">4. Tap the notification or an action button</p>
                     <p class="text-[11px] text-green-700">Pass: NotificationScheduled + NotificationReceived appear (same as direct scheduling). Action buttons work.</p>
                     <p class="text-[11px] text-indigo-400">This proves the full Laravel Notification channel integration works end-to-end.</p>
+                </div>
+            </button>
+
+            {{-- Scenario 8a: Custom sound (direct API) --}}
+            <button wire:click="scheduleCustomSoundTest" class="card-press w-full px-5 py-4 active:bg-gray-800/50 transition-colors text-left">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-amber-600/20 flex items-center justify-center text-lg">8a</div>
+                    <div class="flex-1">
+                        <p class="text-sm font-semibold text-amber-400">Custom Sound — Direct API (10s)</p>
+                        <p class="text-xs text-gray-500 mt-0.5">Tests: custom sound via Facade with soundName parameter.</p>
+                    </div>
+                </div>
+                <div class="mt-2 ml-13 space-y-1">
+                    <p class="text-[11px] text-gray-500">1. Tap this button, keep app open</p>
+                    <p class="text-[11px] text-gray-500">2. Wait 10s for the notification</p>
+                    <p class="text-[11px] text-gray-500">3. Listen for the sound when it arrives</p>
+                    <p class="text-[11px] text-green-700">Pass: Notification plays a custom alert sound (different from system default). NotificationReceived appears in log.</p>
+                    <p class="text-[11px] text-red-700">Fail: Notification plays the default system sound or is silent.</p>
+                    <p class="text-[11px] text-amber-400">Compare with scenario #1 (system default) to hear the difference.</p>
+                </div>
+            </button>
+
+            {{-- Scenario 8b: Custom sound (Laravel Channel) --}}
+            <button wire:click="scheduleCustomSoundChannelTest" class="card-press w-full px-5 py-4 active:bg-gray-800/50 transition-colors text-left">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-amber-600/20 flex items-center justify-center text-lg">8b</div>
+                    <div class="flex-1">
+                        <p class="text-sm font-semibold text-amber-400">Custom Sound — Laravel Channel (10s)</p>
+                        <p class="text-xs text-gray-500 mt-0.5">Tests: custom sound via Laravel Notification channel using ->sound('alert.wav').</p>
+                    </div>
+                </div>
+                <div class="mt-2 ml-13 space-y-1">
+                    <p class="text-[11px] text-gray-500">1. Tap this button, keep app open</p>
+                    <p class="text-[11px] text-gray-500">2. Wait 10s for the notification</p>
+                    <p class="text-[11px] text-gray-500">3. Listen for the same custom sound as #8a</p>
+                    <p class="text-[11px] text-gray-500">4. Expand to see action buttons (OK, Cancel, Snooze)</p>
+                    <p class="text-[11px] text-green-700">Pass: Same custom sound as #8a. Proves ->sound('alert.wav') fluent builder works via channel.</p>
+                    <p class="text-[11px] text-red-700">Fail: Default system sound or silent — soundName not passed through channel.</p>
                 </div>
             </button>
         </div>

@@ -76,8 +76,34 @@
             </div>
         </div>
 
+        {{-- Notification Sound --}}
+        <div class="section-enter" style="animation-delay: 0.3s">
+            <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 block">
+                Notification Sound <span class="text-gray-600 normal-case">(optional)</span>
+            </label>
+            <div class="grid grid-cols-3 gap-2">
+                <button type="button" wire:click="$set('sound_name', null)"
+                        class="py-3 rounded-xl text-sm font-semibold text-center transition-all duration-200
+                               {{ $sound_name === null
+                                   ? 'bg-violet-600 text-white shadow-lg shadow-violet-600/20'
+                                   : 'bg-gray-900 border border-gray-800/50 text-gray-400 active:bg-gray-800' }}">
+                    Default
+                </button>
+                @foreach($availableSounds as $file => $label)
+                    <button type="button" wire:click="$set('sound_name', '{{ $file }}')"
+                            class="py-3 rounded-xl text-sm font-semibold text-center transition-all duration-200
+                                   {{ $sound_name === $file
+                                       ? 'bg-violet-600 text-white shadow-lg shadow-violet-600/20'
+                                       : 'bg-gray-900 border border-gray-800/50 text-gray-400 active:bg-gray-800' }}">
+                        {{ $label }}
+                    </button>
+                @endforeach
+            </div>
+            <p class="mt-2 text-[11px] text-gray-600">Add custom sounds to <code class="text-gray-500">resources/sounds/</code></p>
+        </div>
+
         {{-- Actions --}}
-        <div class="pt-2 space-y-3 section-enter" style="animation-delay: 0.3s">
+        <div class="pt-2 space-y-3 section-enter" style="animation-delay: 0.35s">
             <button type="submit"
                     wire:loading.attr="disabled"
                     class="card-press w-full py-3.5 bg-violet-600 active:bg-violet-700 disabled:opacity-50 text-white text-sm font-semibold rounded-xl transition-all duration-200 shadow-lg shadow-violet-600/20 flex items-center justify-center gap-2">

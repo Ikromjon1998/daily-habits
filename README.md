@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![PHP](https://img.shields.io/badge/PHP-8.3%2B-777BB4?logo=php&logoColor=white)](https://php.net)
 [![Release](https://img.shields.io/github/v/release/Ikromjon1998/daily-habits)](https://github.com/Ikromjon1998/daily-habits/releases)
-[![Notification Plugin](https://img.shields.io/badge/local--notifications-v1.8.1-ff6f00)](https://github.com/Ikromjon1998/nativephp-mobile-local-notifications)
+[![Notification Plugin](https://img.shields.io/badge/local--notifications-v1.9.0-ff6f00)](https://github.com/Ikromjon1998/nativephp-mobile-local-notifications)
 
 A mobile daily habits tracker built with Laravel, Livewire, and NativePHP Mobile. Runs natively on Android and iOS — no server required, everything works offline.
 
@@ -24,6 +24,7 @@ If you're interested in trying out the notification plugin, this app is a great 
 
 - Create daily habits with emoji icons, descriptions, and reminder times
 - Frequency options: daily, weekdays, or weekends
+- Custom notification sounds — pick from bundled presets or add your own to `resources/sounds/`
 - Native push notifications with daily repeating reminders
 - Mark habits complete directly from notification action buttons (Done / Skip / Snooze)
 - Laravel Notification channel integration — schedule via `$notifiable->notify()`
@@ -45,7 +46,7 @@ If you're interested in trying out the notification plugin, this app is a great 
 - **Tailwind CSS 4** — dark theme with safe area inset support
 - **Alpine.js** — lightweight client-side interactivity (bundled with Livewire)
 - **SQLite** — local on-device database
-- [`ikromjon/nativephp-mobile-local-notifications`](https://github.com/Ikromjon1998/nativephp-mobile-local-notifications) v1.8.1 — local notification scheduling with repeating intervals, action buttons, native snooze rescheduling, cold-start event delivery, rich content, and Laravel Notification channel integration
+- [`ikromjon/nativephp-mobile-local-notifications`](https://github.com/Ikromjon1998/nativephp-mobile-local-notifications) v1.9.0 — local notification scheduling with repeating intervals, action buttons, native snooze rescheduling, cold-start event delivery, rich content, custom sounds, and Laravel Notification channel integration
 
 ## How It Works
 
@@ -139,8 +140,27 @@ Navigate to **Settings > Notification Debug** to access 9 test scenarios that ve
 | 5 | Update Timing (120s > 15s) | Rescheduling to fire sooner |
 | 6 | Schedule + Cancel + GetPending | Instant schedule/cancel/list operations |
 | 7 | Laravel Notification Channel (10s) | Full end-to-end via `$notifiable->notify()` |
+| 8a | Custom Sound — Direct API (10s) | Custom sound via Facade with `soundName` parameter |
+| 8b | Custom Sound — Laravel Channel (10s) | Custom sound via `->sound('alert.wav')` fluent builder |
 
 All events are logged in real-time at the bottom of the debug panel.
+
+### Custom Notification Sounds
+
+Each habit can have its own notification sound. The sound picker in the habit form auto-discovers files from `resources/sounds/`:
+
+```
+resources/sounds/
+  alert.wav       # Two-tone alert
+  bell.wav        # Single bell ring
+  chime.wav       # Ascending chime
+  gentle.wav      # Soft two-note
+  urgent.wav      # Rapid triple beep
+```
+
+**To add a custom sound:** Drop a `.wav`, `.mp3`, `.ogg`, `.caf`, or `.aiff` file into `resources/sounds/` — it will automatically appear in the habit form picker. For Android, also copy the file to `nativephp/android/app/src/main/res/raw/`.
+
+> **Naming:** Use lowercase letters, digits, and underscores only (e.g. `my_sound.wav`). Hyphens and uppercase break Android resource lookup. See the [plugin docs](https://github.com/Ikromjon1998/nativephp-mobile-local-notifications/blob/main/docs/custom-sounds.md) for full details.
 
 ### Live UI Updates
 
@@ -204,6 +224,7 @@ database/
   seeders/           HabitSeeder.php
 resources/
   css/app.css        Tailwind @theme + custom animations
+  sounds/            Notification sound presets (alert, bell, chime, gentle, urgent)
   views/
     layouts/         Base layout with bottom nav, safe areas, timezone detection
     livewire/        Component views (today, settings, habit-form, notification-debug)

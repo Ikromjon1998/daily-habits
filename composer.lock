@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a7361ac81cca0ff9d1c8f275daba37ee",
+    "content-hash": "dac17510678cc2d254a1533ca4359de4",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1278,16 +1278,16 @@
         },
         {
             "name": "ikromjon/nativephp-mobile-local-notifications",
-            "version": "v1.8.1",
+            "version": "v1.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Ikromjon1998/nativephp-mobile-local-notifications.git",
-                "reference": "b75e51b22b85d75a12737e156f5af580172cc36e"
+                "reference": "c2205a03dd795e3c5d9a62d14928d2591022d0ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Ikromjon1998/nativephp-mobile-local-notifications/zipball/b75e51b22b85d75a12737e156f5af580172cc36e",
-                "reference": "b75e51b22b85d75a12737e156f5af580172cc36e",
+                "url": "https://api.github.com/repos/Ikromjon1998/nativephp-mobile-local-notifications/zipball/c2205a03dd795e3c5d9a62d14928d2591022d0ea",
+                "reference": "c2205a03dd795e3c5d9a62d14928d2591022d0ea",
                 "shasum": ""
             },
             "require": {
@@ -1334,9 +1334,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Ikromjon1998/nativephp-mobile-local-notifications/issues",
-                "source": "https://github.com/Ikromjon1998/nativephp-mobile-local-notifications/tree/v1.8.1"
+                "source": "https://github.com/Ikromjon1998/nativephp-mobile-local-notifications/tree/v1.9.0"
             },
-            "time": "2026-04-05T12:35:32+00:00"
+            "time": "2026-04-05T20:31:01+00:00"
         },
         {
             "name": "laravel/framework",

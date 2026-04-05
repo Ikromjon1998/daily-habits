@@ -18,6 +18,7 @@ class Habit extends Model
         'emoji',
         'reminder_time',
         'frequency',
+        'sound_name',
         'is_active',
     ];
 

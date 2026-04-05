@@ -28,6 +28,7 @@ class HabitNotificationService
                 bigText: $this->buildBigText($habit),
                 data: ['habit_id' => $habit->id],
                 actions: $this->buildActions(),
+                soundName: $habit->sound_name,
             ));
 
             return;
@@ -46,6 +47,7 @@ class HabitNotificationService
             bigText: $this->buildBigText($habit),
             data: ['habit_id' => $habit->id],
             actions: $this->buildActions(),
+            soundName: $habit->sound_name,
         ));
     }
 

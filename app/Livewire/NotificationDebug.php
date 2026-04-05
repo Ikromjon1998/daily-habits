@@ -212,6 +212,31 @@ class NotificationDebug extends Component
         $this->log('Scheduled (Channel)', 'debug-channel — fires in 10s via Laravel Notification channel with 2 actions: OK, Cancel');
     }
 
+    /**
+     * Scenario 8a: Custom sound notification (10s, warm start).
+     */
+    public function scheduleCustomSoundTest(): void
+    {
+        LocalNotifications::schedule([
+            'id' => 'debug-custom-sound',
+            'title' => 'Custom Sound Test',
+            'body' => 'This should play a custom alert sound (not the default)',
+            'delay' => 10,
+            'soundName' => 'alert.wav',
+            'data' => ['scenario' => 'custom-sound', 'ts' => now()->timestamp],
+        ]);
+        $this->log('Scheduled', 'debug-custom-sound — fires in 10s with custom sound "alert.wav"');
+    }
+
+    /**
+     * Scenario 8b: Custom sound via Laravel Channel (10s).
+     */
+    public function scheduleCustomSoundChannelTest(): void
+    {
+        (new AnonymousNotifiable)->notify(new DebugLocalNotification(useCustomSound: true));
+        $this->log('Scheduled (Channel)', 'debug-channel-sound — fires in 10s with custom sound via ->sound("alert.wav")');
+    }
+
     public function clearLog(): void
     {
         $this->eventLog = [];

@@ -26,9 +26,15 @@ class HabitForm extends Component
     #[Validate('required|in:daily,weekdays,weekends')]
     public string $frequency = 'daily';
 
+    #[Validate('nullable|string')]
+    public ?string $sound_name = null;
+
     public bool $showEmojiPicker = false;
 
     public bool $showDeleteConfirm = false;
+
+    /** @var array<string, string> */
+    public array $availableSounds = [];
 
     /** @var array<int, string> */
     public array $emojis = [
@@ -39,6 +45,8 @@ class HabitForm extends Component
 
     public function mount(?int $id = null): void
     {
+        $this->availableSounds = $this->discoverSounds();
+
         if ($id) {
             $this->habit = Habit::findOrFail($id);
             $this->name = $this->habit->name;
@@ -46,6 +54,7 @@ class HabitForm extends Component
             $this->emoji = $this->habit->emoji;
             $this->reminder_time = $this->habit->reminder_time;
             $this->frequency = $this->habit->frequency;
+            $this->sound_name = $this->habit->sound_name;
         }
     }
 
@@ -65,6 +74,7 @@ class HabitForm extends Component
             'emoji' => $this->emoji,
             'reminder_time' => $this->reminder_time,
             'frequency' => $this->frequency,
+            'sound_name' => $this->sound_name,
         ];
 
         $notificationService = app(HabitNotificationService::class);
@@ -88,6 +98,35 @@ class HabitForm extends Component
         }
 
         $this->redirect('/', navigate: true);
+    }
+
+    /**
+     * Scan resources/sounds/ for available sound files.
+     *
+     * @return array<string, string>
+     */
+    private function discoverSounds(): array
+    {
+        $dir = resource_path('sounds');
+
+        if (! is_dir($dir)) {
+            return [];
+        }
+
+        $sounds = [];
+        $extensions = ['wav', 'mp3', 'ogg', 'caf', 'aiff', 'aif'];
+
+        foreach (scandir($dir) as $file) {
+            $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+            if (in_array($ext, $extensions, true)) {
+                $label = ucfirst(pathinfo($file, PATHINFO_FILENAME));
+                $sounds[$file] = $label;
+            }
+        }
+
+        ksort($sounds);
+
+        return $sounds;
     }
 
     public function render(): View
